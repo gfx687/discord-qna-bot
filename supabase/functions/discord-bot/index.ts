@@ -5,11 +5,7 @@ import { json, serve, validateRequest } from 'https://deno.land/x/sift@0.6.0/mod
 // TweetNaCl is a cryptography library that we use to verify requests
 // from Discord.
 import nacl from 'https://cdn.skypack.dev/tweetnacl@v1.0.3?dts'
-
-enum DiscordCommandType {
-  Ping = 1,
-  ApplicationCommand = 2,
-}
+import { Interaction, InteractionType } from './types.ts';
 
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
@@ -41,36 +37,22 @@ async function home(request: Request) {
       }
     )
   }
+  // TODO: log body
   console.log(body)
 
-  const {
-    type = 0,
-    data = { options: [] },
-    guild_id = '',
-    channel_id = '',
-    member = {
-      user: {
-        id: 0,
-        global_name: '',
-        username: ''
-      }
-    }
-  } = JSON.parse(body)
+  const interaction: Interaction = JSON.parse(body)
   // Discord performs Ping interactions to test our application.
   // Type 1 in a request implies a Ping interaction.
-  if (type === DiscordCommandType.Ping) {
+  if (interaction.type === InteractionType.Ping) {
     return json({
       type: 1, // Type 1 in a response is a Pong interaction response type.
     })
   }
 
-  // user_id = body -> member -> user -> (id: int | username: string | roles: string[])
-  // server_id = body -> guild_id
-
   // Type 2 in a request is an ApplicationCommand interaction.
   // It implies that a user has issued a command.
-  if (type === DiscordCommandType.ApplicationCommand) {
-    const { value } = data.options.find(
+  if (interaction.type === InteractionType.ApplicationCommand) {
+    const option = interaction.data.options.find(
       (option: { name: string; value: string }) => option.name === 'name'
     )
     return json({
@@ -79,7 +61,7 @@ async function home(request: Request) {
       type: 4,
       data: {
         // content: `Hello, ${value}!`
-        content: `Hello, ${value}! user_id='${member.user.id}' user_name='${member.user.username}' guild_id='${guild_id}' channel_id='${channel_id}'`,
+        content: `Hello, ${option!.value}! user_id='${interaction.member.user.id}' user_name='${interaction.member.user.username}' guild_id='${interaction.guild_id}' channel_id='${interaction.channel_id}'`,
       },
     })
   }
