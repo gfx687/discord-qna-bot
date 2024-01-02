@@ -82,12 +82,12 @@ export type Interaction = {
   /**
    * Discord server id
    */
-  guild_id: number;
+  guild_id: string;
 
   /**
    * Channel id (like a text channel / thread / etc)
    */
-  channel_id: number;
+  channel_id: string;
 
   /**
    * Info about user in the context of guild
@@ -134,6 +134,11 @@ export type InteractionDataOption = {
    * Value of the option (no required for some types of interactions, e.g. autocomplete)
    */
   value: string;
+
+  /**
+   * For autocompletion requests. True if user if currently typing this option
+   */
+  focused?: boolean;
 };
 
 // https://discord.com/developers/docs/resources/user#user-object-user-structure
@@ -150,20 +155,28 @@ export type GuildMember = {
 
 // https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object
 export type InteractionResponse = {
-  type: InteractionResponseType;
-
-  /**
-   * Text message content
-   */
-  data: InteractionResponseData;
+  type: InteractionResponseType.ChannelMessageWithSource;
+  data: InteractionResponseMessageData;
+} | {
+  type: InteractionResponseType.ApplicationCommandAutocompleteResult
+  data: InteractionResponseAutocompleteData
 };
 
-/**
- * Exact payload structure of the Response depends on response Type
- */
-export type InteractionResponseData = {
+// https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-messages
+export type InteractionResponseMessageData = {
   /**
    * Text message content
    */
   content: string;
 };
+
+// https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-autocomplete
+export type InteractionResponseAutocompleteData = {
+  choices: ApplicationCommandOptionChoice<string>[]
+}
+
+// https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-choice-structure
+export type ApplicationCommandOptionChoice<T extends string | number> = {
+  name: string;
+  value: T;
+}

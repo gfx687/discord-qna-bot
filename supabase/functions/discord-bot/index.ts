@@ -6,7 +6,7 @@ import { json, serve, validateRequest } from 'https://deno.land/x/sift@0.6.0/mod
 // from Discord.
 import nacl from 'https://cdn.skypack.dev/tweetnacl@v1.0.3?dts'
 import { Interaction, InteractionType } from './types.ts';
-import { handleCommands } from './handle-commands.ts';
+import { handleAutocomplete, handleCommands } from './handle-commands.ts';
 
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
@@ -38,8 +38,6 @@ async function home(request: Request): Promise<Response> {
       }
     )
   }
-  // TODO: log body
-  console.log(body)
 
   const interaction: Interaction = JSON.parse(body)
   // Discord performs Ping interactions to test our application.
@@ -51,7 +49,12 @@ async function home(request: Request): Promise<Response> {
   }
 
   if (interaction.type === InteractionType.ApplicationCommand) {
-    const response = handleCommands(interaction)
+    const response = await handleCommands(interaction)
+    return json(response)
+  }
+
+  if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
+    const response = await handleAutocomplete(interaction)
     return json(response)
   }
 
