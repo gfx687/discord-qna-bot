@@ -6,6 +6,7 @@ import { json, serve, validateRequest } from 'https://deno.land/x/sift@0.6.0/mod
 // from Discord.
 import nacl from 'https://cdn.skypack.dev/tweetnacl@v1.0.3?dts'
 import { Interaction, InteractionType } from './types.ts';
+import { handleCommands } from './handle-commands.ts';
 
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
@@ -13,7 +14,7 @@ serve({
 })
 
 // The main logic of the Discord Slash Command is defined in this function.
-async function home(request: Request) {
+async function home(request: Request): Promise<Response> {
   // validateRequest() ensures that a request is of POST method and
   // has the following headers.
   const { error } = await validateRequest(request, {
@@ -49,21 +50,9 @@ async function home(request: Request) {
     })
   }
 
-  // Type 2 in a request is an ApplicationCommand interaction.
-  // It implies that a user has issued a command.
   if (interaction.type === InteractionType.ApplicationCommand) {
-    const option = interaction.data.options.find(
-      (option: { name: string; value: string }) => option.name === 'name'
-    )
-    return json({
-      // Type 4 responds with the below message retaining the user's
-      // input at the top.
-      type: 4,
-      data: {
-        // content: `Hello, ${value}!`
-        content: `Hello, ${option!.value}! user_id='${interaction.member.user.id}' user_name='${interaction.member.user.username}' guild_id='${interaction.guild_id}' channel_id='${interaction.channel_id}'`,
-      },
-    })
+    const response = handleCommands(interaction)
+    return json(response)
   }
 
   // We will return a bad request error as a valid Discord request
