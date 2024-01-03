@@ -52,6 +52,27 @@ export interface Database {
         }
         Relationships: []
       }
+      qna_edit_processes: {
+        Row: {
+          guild_id: string
+          process_id: string
+          question: string
+          started_at: string
+        }
+        Insert: {
+          guild_id: string
+          process_id: string
+          question: string
+          started_at: string
+        }
+        Update: {
+          guild_id?: string
+          process_id?: string
+          question?: string
+          started_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
