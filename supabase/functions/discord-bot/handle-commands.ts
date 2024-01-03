@@ -1,9 +1,10 @@
-import { handleHelloCommand } from "./slash-commands/hello.ts";
+import { handleCommandNotFound } from "./slash-commands/not-implemented.ts";
 import { handleQnaAutocomplete, handleQnaCommand } from "./slash-commands/qna-search.ts";
 import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction } from "./types/types.ts";
 import { InteractionResponse, InteractionResponseType, MessageFlags } from "./types/interaction-response-types.ts";
 import { EditModalCustomId, handleQnaEditCommand, handleQnaEditModalSubmit } from "./slash-commands/qna-edit.ts";
 import { handleQnaDeleteCommand } from "./slash-commands/qna-delete.ts";
+import { NewQuestionModalCustomId, handleQnaNewCommand, handleQnaNewModalSubmit } from "./slash-commands/qna-new.ts";
 
 export async function handleCommands(interaction: CommandInteraction): Promise<InteractionResponse> {
   switch (interaction.data.name) {
@@ -13,8 +14,10 @@ export async function handleCommands(interaction: CommandInteraction): Promise<I
       return await handleQnaEditCommand(interaction);
     case "qna-delete":
       return await handleQnaDeleteCommand(interaction);
+    case "qna-new":
+      return handleQnaNewCommand(interaction);
     default:
-      return handleHelloCommand(interaction);
+      return handleCommandNotFound(interaction);
   }
 }
 
@@ -50,6 +53,9 @@ export async function handleMessageComponent(interaction: MessageComponentIntera
 export async function handleModalSubmit(interaction: ModalSubmitInteraction): Promise<InteractionResponse> {
   if (interaction.data.custom_id.startsWith(EditModalCustomId)) {
     return await handleQnaEditModalSubmit(interaction);
+  }
+  if (interaction.data.custom_id == NewQuestionModalCustomId) {
+    return await handleQnaNewModalSubmit(interaction)
   }
 
   return {
