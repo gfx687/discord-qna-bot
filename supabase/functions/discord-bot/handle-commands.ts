@@ -3,6 +3,7 @@ import { handleQnaAutocomplete, handleQnaCommand } from "./slash-commands/qna-se
 import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction } from "./types/types.ts";
 import { InteractionResponse, InteractionResponseType, MessageFlags } from "./types/interaction-response-types.ts";
 import { EditModalCustomId, handleQnaEditCommand, handleQnaEditModalSubmit } from "./slash-commands/qna-edit.ts";
+import { handleQnaDeleteCommand } from "./slash-commands/qna-delete.ts";
 
 export async function handleCommands(interaction: CommandInteraction): Promise<InteractionResponse> {
   switch (interaction.data.name) {
@@ -10,6 +11,8 @@ export async function handleCommands(interaction: CommandInteraction): Promise<I
       return await handleQnaCommand(interaction);
     case "qna-edit":
       return await handleQnaEditCommand(interaction);
+    case "qna-delete":
+      return await handleQnaDeleteCommand(interaction);
     default:
       return handleHelloCommand(interaction);
   }
@@ -20,6 +23,8 @@ export async function handleAutocomplete(interaction: CommandInteraction): Promi
     case "qna":
       return await handleQnaAutocomplete(interaction);
     case "qna-edit":
+      return await handleQnaAutocomplete(interaction);
+    case "qna-delete":
       return await handleQnaAutocomplete(interaction);
     default:
       return {
