@@ -34,6 +34,36 @@ export interface Database {
   }
   public: {
     Tables: {
+      command_invocations_log: {
+        Row: {
+          command: string
+          guild_id: string
+          invoked_at: string | null
+          question: string
+          user_global_name: string
+          user_id: string
+          username: string
+        }
+        Insert: {
+          command: string
+          guild_id: string
+          invoked_at?: string | null
+          question: string
+          user_global_name: string
+          user_id: string
+          username: string
+        }
+        Update: {
+          command?: string
+          guild_id?: string
+          invoked_at?: string | null
+          question?: string
+          user_global_name?: string
+          user_id?: string
+          username?: string
+        }
+        Relationships: []
+      }
       qna: {
         Row: {
           answer: string

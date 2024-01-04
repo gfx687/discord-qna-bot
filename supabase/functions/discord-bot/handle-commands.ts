@@ -4,9 +4,12 @@ import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction
 import { InteractionResponse, InteractionResponseType, MessageFlags } from "./types/interaction-response-types.ts";
 import { EditModalCustomId, handleQnaEditCommand, handleQnaEditModalSubmit } from "./slash-commands/qna-edit.ts";
 import { handleQnaDeleteCommand } from "./slash-commands/qna-delete.ts";
-import { NewQuestionModalCustomId, handleQnaNewCommand, handleQnaNewModalSubmit } from "./slash-commands/qna-new.ts";
+import { handleQnaNewCommand, handleQnaNewModalSubmit, NewQuestionModalCustomId } from "./slash-commands/qna-new.ts";
+import { supabase } from "../_shared/supabaseClient.ts";
 
 export async function handleCommands(interaction: CommandInteraction): Promise<InteractionResponse> {
+  await LogInvocation(interaction);
+
   switch (interaction.data.name) {
     case "qna":
       return await handleQnaCommand(interaction);
@@ -55,7 +58,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
     return await handleQnaEditModalSubmit(interaction);
   }
   if (interaction.data.custom_id == NewQuestionModalCustomId) {
-    return await handleQnaNewModalSubmit(interaction)
+    return await handleQnaNewModalSubmit(interaction);
   }
 
   return {
@@ -65,4 +68,19 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       flags: MessageFlags.Ephemeral,
     },
   };
+}
+
+export async function LogInvocation(interaction: CommandInteraction) {
+  const option = interaction.data?.options?.find((option) => option.name === "question");
+
+  await supabase.from("command_invocations_log")
+    .insert({
+      guild_id: interaction.guild_id,
+      user_id: interaction.member.user.id,
+      username: interaction.member.user.username,
+      user_global_name: interaction.member.user.global_name,
+      command: interaction.data.name,
+      question: option?.value || "<unknown>",
+    })
+    .select();
 }
