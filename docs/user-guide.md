@@ -2,7 +2,7 @@
 
 Ask me for the bot invite link.
 
-**What will the bot be able to do on my server?**  
+## What Will the Bot Be Able to Do on My Server?
 When you follow the invite link,  you will see full list of requested permissions before adding the bot.
 
 The bot only needs one permission to work:
