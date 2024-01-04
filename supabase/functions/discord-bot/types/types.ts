@@ -4,9 +4,8 @@ import { MessageComponent, MessageComponentType } from "./message-component-type
 // https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type
 export enum InteractionType {
   Ping = 1,
-  /**
-   * Slash command
-   */
+
+  /** Slash command */
   ApplicationCommand = 2,
   MessageComponent = 3,
   ApplicationCommandAutocomplete = 4,
@@ -15,19 +14,13 @@ export enum InteractionType {
 
 // https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
 export enum ApplicationCommandType {
-  /**
-   * Slash commands; a text-based command that shows up when a user types /
-   */
+  /** Slash commands; a text-based command that shows up when a user types / */
   ChatInput = 1,
 
-  /**
-   * A UI-based command that shows up when you right click or tap on a user
-   */
+  /** A UI-based command that shows up when you right click or tap on a user */
   User = 2,
 
-  /**
-   * A UI-based command that shows up when you right click or tap on a message
-   */
+  /** A UI-based command that shows up when you right click or tap on a message */
   Message = 3,
 }
 
@@ -84,9 +77,7 @@ export type InteractionDataCommand = {
   name: string;
   type: ApplicationCommandType;
 
-  /**
-   * Params and values from the user (can be partially filled for autocomplete interactions)
-   */
+  /** Params and values from the user (can be partially filled for autocomplete interactions) */
   options: InteractionDataOption[];
 };
 
@@ -104,23 +95,15 @@ export type InteractionDataModal = {
 
 // https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-application-command-interaction-data-option-structure
 export type InteractionDataOption = {
-  /**
-   * Parameter name
-   */
+  /** Parameter name */
   name: string;
 
-  /**
-   * Data type
-   */
+  /** Data type */
   type: ApplicationCommandOptionType;
 
-  /**
-   * Value of the option (no required for some types of interactions, e.g. autocomplete)
-   */
+  /** Value of the option (no required for some types of interactions, e.g. autocomplete) */
   value: string;
 
-  /**
-   * For autocompletion requests. True if user if currently typing this option
-   */
+  /** For autocompletion requests. True if user if currently typing this option */
   focused?: boolean;
 };

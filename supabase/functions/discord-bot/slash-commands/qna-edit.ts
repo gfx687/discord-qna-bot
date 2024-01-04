@@ -40,6 +40,8 @@ export async function handleQnaEditCommand(interaction: CommandInteraction): Pro
     };
   }
 
+  // Save information about edit process to database because when modal is submitted we will not receive information
+  // about command that spawned it (meaning we don't know what question user is editing).
   const processId = `${EditModalCustomId}_${crypto.randomUUID()}`;
   const insertResult = await supabase
     .from("qna_edit_processes")
