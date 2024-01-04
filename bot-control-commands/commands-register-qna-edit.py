@@ -10,6 +10,8 @@ json_payload = {
     "name": "qna-edit",
     "type": 1,  # slash command
     "description": "Edit existing question's answer.",
+    "dm_permission": False,
+    # "default_member_permissions": 0,
     "options": [
         {
             "name": "question",

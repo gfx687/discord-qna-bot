@@ -9,7 +9,9 @@ url = f"https://discord.com/api/v10/applications/{data['APPLICATION_ID']}/comman
 json_payload = {
     "name": "qna-new",
     "type": 1,  # slash command
-    "description": "Add new question with answer."
+    "description": "Add new question with answer.",
+    "dm_permission": False,
+    # "default_member_permissions": 0,
 }
 
 headers = {

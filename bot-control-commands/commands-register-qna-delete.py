@@ -10,6 +10,8 @@ json_payload = {
     "name": "qna-delete",
     "type": 1,  # slash command
     "description": "Delete question.",
+    "dm_permission": False,
+    # "default_member_permissions": 0,
     "options": [
         {
             "name": "question",

@@ -10,6 +10,7 @@ json_payload = {
     "name": "qna",
     "type": 1,  # slash command
     "description": "Ask a question and bot will see if it has an answer.",
+    "dm_permission": False,
     "options": [
         {
             "name": "question",
