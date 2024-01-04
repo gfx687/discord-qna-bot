@@ -23,11 +23,11 @@ Complete following steps as the **server admin**:
 You're done! Now, the Q&A role (and the server owner by default) has access to every command, while @everyone only has access to /qna.
 
 ## Visual Examples of Bot Usage
-Searching for question:
-![qna search](https://raw.github.com/gfx687/discord-qna-botthumbnail-generator/docs/docs/assets/qna-search.png)
+Searching for question:  
+![qna search](https://raw.github.com/gfx687/discord-qna-bot/docs/docs/assets/qna-search.png)
 
-Receiving an answer:
+Receiving an answer:  
 ![qna response](https://raw.github.com/gfx687/discord-qna-bot/docs/docs/assets/qna-response.png)
 
-Creating new question/answer pair:
-![qna new](https://raw.github.com/gfx687/thumbnail-generatordiscord-qna-bot/docs/docs/assets/qna-new.png)
+Creating new question/answer pair:  
+![qna new](https://raw.github.com/gfx687/discord-qna-bot/docs/docs/assets/qna-new.png)
