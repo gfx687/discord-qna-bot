@@ -6,6 +6,7 @@ import { EditModalCustomId, handleQnaEditCommand, handleQnaEditModalSubmit } fro
 import { handleQnaDeleteCommand } from "./slash-commands/qna-delete.ts";
 import { handleQnaNewCommand, handleQnaNewModalSubmit, NewQuestionModalCustomId } from "./slash-commands/qna-new.ts";
 import { supabase } from "../_shared/supabaseClient.ts";
+import { handleAcronymSearch } from "./slash-commands/acronyms.ts";
 
 export async function handleCommands(interaction: CommandInteraction): Promise<InteractionResponse> {
   await LogInvocation(interaction);
@@ -19,6 +20,8 @@ export async function handleCommands(interaction: CommandInteraction): Promise<I
       return await handleQnaDeleteCommand(interaction);
     case "qna-new":
       return handleQnaNewCommand(interaction);
+    case "acronym":
+      return handleAcronymSearch(interaction);
     default:
       return handleCommandNotFound(interaction);
   }
