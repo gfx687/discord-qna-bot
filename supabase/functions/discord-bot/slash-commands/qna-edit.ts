@@ -7,6 +7,7 @@ import {
 } from "../types/message-component-types.ts";
 import { CommandInteraction, ModalSubmitInteraction } from "../types/types.ts";
 import { InteractionResponse, InteractionResponseType, MessageFlags } from "../types/interaction-response-types.ts";
+import { ChatMessageResponse } from "./common.ts";
 
 export const EditModalCustomId = "qna_edit_modal";
 export const EditModalAnswerInputCustomId = "qna_edit_modal_new_answer";
@@ -14,13 +15,7 @@ export const EditModalAnswerInputCustomId = "qna_edit_modal_new_answer";
 export async function handleQnaEditCommand(interaction: CommandInteraction): Promise<InteractionResponse> {
   const option = interaction.data.options.find((option) => option.name === "question");
   if (option == null || option.value == null || option.value.trim() == "") {
-    return {
-      type: InteractionResponseType.ChannelMessageWithSource,
-      data: {
-        content: "Question cannot be empty when using edit command.",
-        flags: MessageFlags.Ephemeral,
-      },
-    };
+    return ChatMessageResponse("Question cannot be empty when using edit command.", MessageFlags.Ephemeral);
   }
 
   const { data } = await supabase.from("qna")
@@ -30,14 +25,10 @@ export async function handleQnaEditCommand(interaction: CommandInteraction): Pro
     .maybeSingle();
 
   if (data == null) {
-    return {
-      type: InteractionResponseType.ChannelMessageWithSource,
-      data: {
-        content:
-          "No question found. Make sure to provide full name of the question, edit command does not allow for ambiguity in search term.",
-        flags: MessageFlags.Ephemeral,
-      },
-    };
+    return ChatMessageResponse(
+      "No question found. Make sure to provide full name of the question, edit command does not allow for ambiguity in search term.",
+      MessageFlags.Ephemeral,
+    );
   }
 
   // Save information about edit process to database because when modal is submitted we will not receive information
@@ -57,13 +48,7 @@ export async function handleQnaEditCommand(interaction: CommandInteraction): Pro
 
   if (insertResult.error) {
     console.error(insertResult.error);
-    return {
-      type: InteractionResponseType.ChannelMessageWithSource,
-      data: {
-        content: "Something went wrong.",
-        flags: MessageFlags.Ephemeral,
-      },
-    };
+    return ChatMessageResponse("Something went wrong.", MessageFlags.Ephemeral);
   }
 
   return {
@@ -96,13 +81,10 @@ export async function handleQnaEditModalSubmit(interaction: ModalSubmitInteracti
     .maybeSingle();
 
   if (data == null) {
-    return {
-      type: InteractionResponseType.ChannelMessageWithSource,
-      data: {
-        content: "Question not found. Unless someone deleted it while you were editing something went wrong.",
-        flags: MessageFlags.Ephemeral,
-      },
-    };
+    return ChatMessageResponse(
+      "Question not found. Unless someone deleted it while you were editing something went wrong.",
+      MessageFlags.Ephemeral,
+    );
   }
 
   const formInputs = interaction.data.components.find((c) =>
@@ -113,13 +95,7 @@ export async function handleQnaEditModalSubmit(interaction: ModalSubmitInteracti
     c.type == MessageComponentType.TextInput && c.custom_id == EditModalAnswerInputCustomId
   ) as MessageComponentTextInput;
   if (newAnswer == null || newAnswer.value == null || newAnswer.value.trim() == "") {
-    return {
-      type: InteractionResponseType.ChannelMessageWithSource,
-      data: {
-        content: "Invalid answer was provided.",
-        flags: MessageFlags.Ephemeral,
-      },
-    };
+    return ChatMessageResponse("Invalid answer was provided.", MessageFlags.Ephemeral);
   }
 
   const updateResult = await supabase
@@ -131,19 +107,8 @@ export async function handleQnaEditModalSubmit(interaction: ModalSubmitInteracti
     .maybeSingle();
   if (updateResult.data == null || updateResult.error) {
     console.error(updateResult.error);
-    return {
-      type: InteractionResponseType.ChannelMessageWithSource,
-      data: {
-        content: "Something went wrong.",
-        flags: MessageFlags.Ephemeral,
-      },
-    };
+    return ChatMessageResponse("Something went wrong.", MessageFlags.Ephemeral);
   }
 
-  return {
-    type: InteractionResponseType.ChannelMessageWithSource,
-    data: {
-      content: `New answer to question "${data.question}" has been saved.\n\n${updateResult.data.answer}`,
-    },
-  };
+  return ChatMessageResponse(`Saved new answer to question "${data.question}".\n\n${updateResult.data.answer}`);
 }

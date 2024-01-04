@@ -10,7 +10,7 @@ Creating a bot using only the Interactions API (slash commands) allows the bot t
 
 This particular repository uses [Supabase](https://supabase.com/) to host the bot, utilizing Supabase's edge functions and database.
 
-## Known Issues and Caveats:
+## Known Issues and Caveats
 1) Currently, slash commands do not support multi-line inputs - https://github.com/discord/discord-api-docs/issues/2381
 
     Meaning User Experience of entering long strings is subpar to say the least.

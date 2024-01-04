@@ -9,7 +9,7 @@ url = f"https://discord.com/api/v10/applications/{data['APPLICATION_ID']}/comman
 json_payload = {
     "name": "qna-delete",
     "type": 1,  # slash command
-    "description": "Delete question.",
+    "description": "Delete a question.",
     "dm_permission": False,
     # "default_member_permissions": 0,
     "options": [
