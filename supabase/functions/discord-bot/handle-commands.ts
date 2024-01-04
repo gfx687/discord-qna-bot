@@ -37,7 +37,7 @@ export async function handleAutocomplete(interaction: CommandInteraction): Promi
   }
 }
 
-export async function handleMessageComponent(interaction: MessageComponentInteraction): Promise<InteractionResponse> {
+export function handleMessageComponent(interaction: MessageComponentInteraction): InteractionResponse {
   switch (interaction.data.custom_id) {
     default:
       return {

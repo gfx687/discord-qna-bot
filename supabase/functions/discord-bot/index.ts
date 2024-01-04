@@ -51,7 +51,7 @@ async function home(request: Request): Promise<Response> {
     return json(response);
   }
   if (interaction.type === InteractionType.MessageComponent) {
-    const response = await handleMessageComponent(interaction);
+    const response = handleMessageComponent(interaction);
     return json(response);
   }
   if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {

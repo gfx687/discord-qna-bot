@@ -33,7 +33,7 @@ export async function handleQnaEditCommand(interaction: CommandInteraction): Pro
       type: InteractionResponseType.ChannelMessageWithSource,
       data: {
         content:
-          "No question found. Make sure to provide full name of the questions, edit command does not allow for ambiguity in search term.",
+          "No question found. Make sure to provide full name of the question, edit command does not allow for ambiguity in search term.",
         flags: MessageFlags.Ephemeral,
       },
     };

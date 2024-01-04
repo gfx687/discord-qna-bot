@@ -27,7 +27,7 @@ export async function handleQnaDeleteCommand(interaction: CommandInteraction): P
       type: InteractionResponseType.ChannelMessageWithSource,
       data: {
         content:
-          "No question found. Make sure to provide full name of the questions, delete command does not allow for ambiguity in search term.",
+          "No question found. Make sure to provide full name of the question, delete command does not allow for ambiguity in search term.",
         flags: MessageFlags.Ephemeral,
       },
     };
