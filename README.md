@@ -1,5 +1,5 @@
 # discord-qna-bot
-
+![qna search](https://raw.github.com/gfx687/discord-qna-botthumbnail-generator/docs/docs/assets/qna-search.png)
 > If you are looking for **User Guide** rather than Developer README, it is located [here](docs/user-guide.md)
 
 Discord Bot with Questions and Answers (Q&A) functionality created using exclusively Discord's [Interaction API](https://discord.com/developers/docs/interactions/application-commands)
