@@ -19,6 +19,7 @@ export async function handleQnaDeleteCommand(interaction: CommandInteraction): P
 
   const { data } = await supabase.from("qna")
     .select()
+    .eq("guild_id", interaction.guild_id)
     .eq("question", option.value)
     .maybeSingle();
 
@@ -35,6 +36,7 @@ export async function handleQnaDeleteCommand(interaction: CommandInteraction): P
 
   const deleteResult = await supabase.from("qna")
     .delete()
+    .eq("guild_id", interaction.guild_id)
     .eq("question", option.value);
 
   if (deleteResult.error) {

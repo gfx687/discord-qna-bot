@@ -25,6 +25,7 @@ export async function handleQnaEditCommand(interaction: CommandInteraction): Pro
 
   const { data } = await supabase.from("qna")
     .select()
+    .eq("guild_id", interaction.guild_id)
     .eq("question", option.value)
     .maybeSingle();
 
