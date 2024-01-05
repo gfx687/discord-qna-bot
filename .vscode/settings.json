@@ -1,6 +1,7 @@
 {
   "deno.enablePaths": [
-    "supabase/functions"
+    "supabase/functions",
+    "bot-control-commands"
   ],
   "deno.lint": true,
   "deno.unstable": true,
