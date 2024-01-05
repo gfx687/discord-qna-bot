@@ -1,3 +1,17 @@
+## Table of Contents
+
+1. [How to Add the Bot to Your Server](#how-to-add-the-bot-to-your-server)
+2. [What Will the Bot Be Able to Do on My Server?](#what-will-the-bot-be-able-to-do-on-my-server)
+3. [How to Configure User Permissions to Access Bot Commands](#how-to-configure-user-permissions-to-access-bot-commands)
+4. [Global Bot Commands](#global-bot-commands)
+   - [**/qna** - Search for Questions](#qna---search-for-questions)
+   - [**/qna-new** - Add New Question and Answer Pair](#qna-new---add-new-question-and-answer-pair)
+   - [**/qna-edit** - Edit Answer of an Existing Question](#qna-edit---editing-answer-of-existing-question)
+   - [**/qna-delete** - Delete Question](#qna-delete---delete-question)
+5. [Server-Specific Bot Commands](#server-specific-bot-commands)
+   - [Deep Rock Galactic](#deep-rock-galactic)
+      - [**/acronyms** - Search For All Definitions of the Given Acronym](#acronyms---search-for-all-definitions-of-the-given-acronym)
+
 ## How to Add the Bot to Your Server
 
 Ask me for the bot invite link.
@@ -22,12 +36,52 @@ Complete following steps as the **server admin**:
 
 You're done! Now, the Q&A role (and the server owner by default) has access to every command, while @everyone only has access to /qna.
 
-## Visual Examples of Bot Usage
-Searching for question:  
-![qna search](https://raw.github.com/gfx687/discord-qna-bot/docs/docs/assets/qna-search.png)
+## Global Bot Commands
 
-Receiving an answer:  
-![qna response](https://raw.github.com/gfx687/discord-qna-bot/docs/docs/assets/qna-response.png)
+### /qna - Search for Questions
 
-Creating new question/answer pair:  
-![qna new](https://raw.github.com/gfx687/discord-qna-bot/docs/docs/assets/qna-new.png)
+To search for an answer to your question use command `/qna` and enter your question. 
+
+While you type there will be an autocompletion with hints of what questions match your current input (if any).
+
+![qna search](assets/qna-search.png)
+
+**Receiving an answer:**
+
+![qna response](assets/qna-response.png)
+
+### /qna-new - Add New Question and Answer Pair
+
+To create a new question / answer pair use command `/qna-new` without any parameters. It will open a modal window where your can enter new question's details.
+
+![qna new](assets/qna-new.png)
+
+### /qna-edit - Edit Answer of an Existing Question
+
+To edit a question's answer use command `/qna-edit`.
+
+First you will need to find the questions you want to edit:
+
+![qna edit search](assets/qna-edit-search.png)
+
+After choosing a question and sending command you will see Modal Window with text input.
+
+Text input will be pre-filled with current answer to the question.
+
+![qna edit modal](assets/qna-edit-modal.png)
+
+### /qna-delete - Delete Question
+
+To delete a question use `/qna-delete` command.
+
+![qna delete search](assets/qna-delete-search.png)
+
+## Server-Specific Bot Commands
+
+### Deep Rock Galactic
+
+#### /acronyms - Search For All Definitions of the Given Acronym
+
+![acronym search](assets/acronyms-search.png)
+
+![acronym response](assets/acronyms-response.png)

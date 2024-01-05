@@ -1,14 +1,20 @@
 # discord-qna-bot
 
-![qna search](https://raw.github.com/gfx687/discord-qna-bot/docs/docs/assets/qna-search.png)
+![qna search](docs/assets/qna-search.png)
 
-> If you are looking for **User Guide** rather than Developer README, it is located [here](docs/user-guide.md)
+> If you are looking for a **User Guide** or **visual examples** of the commands this bot provides, please check [User Guide](docs/user-guide.md).
 
 Discord Bot with Questions and Answers (Q&A) functionality created using exclusively Discord's [Interaction API](https://discord.com/developers/docs/interactions/application-commands)
 
 Creating a bot using only the Interactions API (slash commands) allows the bot to be deployed **serverless** and receive all updates from Discord instead of hosting bot 24/7 and querying the Discord Gateway API.
 
-This particular repository uses [Supabase](https://supabase.com/) to host the bot, utilizing Supabase's edge functions and database.
+## Tech Stack
+- **Hosting** - [Supabase](https://supabase.com/), Backend as a Service solution  
+    Provides PostgreSQL database and Edge Functions runtime
+- **Language** - TypeScript and Deno  
+    Because Supabase uses Deno as Edge Functions platform
+- **Discord Library** - none  
+    At first I looked at [Discord.js](https://github.com/discordjs/discord.js) but it is a library for Discord's Gateway API rather than Interactions API. Meaning intended to be used for hosted bots that pull Discord updates, rather than have Discord deliver updates to the bot, which makes it unsuited for hosting serverless with just edge functions.
 
 ## Known Issues and Caveats
 1) Currently, slash commands do not support multi-line inputs - https://github.com/discord/discord-api-docs/issues/2381

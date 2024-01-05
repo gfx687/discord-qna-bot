@@ -21,5 +21,5 @@ export function handleAcronymSearch(interaction: CommandInteraction): Interactio
     .map((x) => `${x.fullName} - ${x.type} for ${x.class}'s ${x.weaponName}`)
     .join("\n");
 
-  return ChatMessageResponse(`Found definitions for ${option.value}:\n\n${content}`);
+  return ChatMessageResponse(`Found definitions for "${option.value}":\n\n${content}`);
 }
