@@ -42,11 +42,5 @@ export async function handleQnaCommand(interaction: CommandInteraction): Promise
     return ChatMessageResponse(`No answers were found for question "${option.value}".`);
   }
 
-  let message = `Your search term: "${option.value}"
-Best matched question: "${data[0].question}"`;
-  if (data.length > 1) {
-    message = message + `\nOther matches found: '${data.slice(1).map((x) => x.question).join(" ; ")}'`;
-  }
-
-  return ChatMessageResponse(`${message}.\n\n${data[0].answer}`);
+  return ChatMessageResponse(data[0].answer);
 }
