@@ -1,6 +1,6 @@
 import { handleCommandNotFound } from "./slash-commands/not-implemented.ts";
 import { handleQnaAutocomplete, handleQnaCommand } from "./slash-commands/qna-search.ts";
-import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction } from "./types/types.ts";
+import { CommandInteraction, InteractionDataOption, MessageComponentInteraction, ModalSubmitInteraction } from "./types/types.ts";
 import { InteractionResponse, InteractionResponseType, MessageFlags } from "./types/interaction-response-types.ts";
 import { EditModalCustomId, handleQnaEditCommand, handleQnaEditModalSubmit } from "./slash-commands/qna-edit.ts";
 import { handleQnaDeleteCommand } from "./slash-commands/qna-delete.ts";
@@ -74,7 +74,11 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
 }
 
 export async function LogInvocation(interaction: CommandInteraction) {
-  const option = interaction.data?.options?.find((option) => option.name === "question");
+  let option: InteractionDataOption | undefined = undefined
+  option = interaction.data?.options?.find((option) => option.name === "question");
+  if (!option) {
+    option = interaction.data.options.find((option) => option.name === "acronym");
+  }
 
   await supabase.from("command_invocations_log")
     .insert({
