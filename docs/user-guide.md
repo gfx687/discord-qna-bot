@@ -22,6 +22,8 @@ When you follow the invite link,  you will see full list of requested permission
 The bot only needs one permission to work:
 - Create commands
 
+See full list of commands [below](#global-bot-commands)
+
 ## How to Configure User Permissions to Access Bot Commands
 Configuring access of users to bot's commands
 
@@ -40,7 +42,7 @@ You're done! Now, the Q&A role (and the server owner by default) has access to e
 
 ### /qna - Search for Questions
 
-To search for an answer to your question use command `/qna` and enter your question. 
+To search for an answer to your question use command `/qna` and enter your question.
 
 While you type there will be an autocompletion with hints of what questions match your current input (if any).
 

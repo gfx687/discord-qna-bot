@@ -1,16 +1,20 @@
-import requests
+# pylint: disable=C0103 # snake_case name for script
+
 import json
 
-with open('bot-control-commands/secrets.json', 'r') as file:
+import requests
+
+with open('bot-control-commands/secrets.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
-url = f"https://discord.com/api/v10/applications/{data['APPLICATION_ID']}/commands/{data['COMMAND_TO_DELETE']}"
+url = f"https://discord.com/api/v10/applications/{
+    data['APPLICATION_ID']}/commands/{data['COMMAND_TO_DELETE']}"
 
 headers = {
     "Authorization": "Bot " + data['BOT_TOKEN']
 }
 
-response = requests.delete(url, headers=headers)
+response = requests.delete(url, headers=headers, timeout=5)
 
 print('Status Code:', response.status_code)
 print('URL:', response.url)

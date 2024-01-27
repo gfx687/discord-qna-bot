@@ -1,10 +1,14 @@
-import requests
+# pylint: disable=C0103 # snake_case name for script
+
 import json
 
-with open('bot-control-commands/secrets.json', 'r') as file:
+import requests
+
+with open('bot-control-commands/secrets.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
-url = f"https://discord.com/api/v10/applications/{data['APPLICATION_ID']}/commands"
+url = f"https://discord.com/api/v10/applications/{
+    data['APPLICATION_ID']}/commands"
 
 json_payload = {
     "name": "qna-edit",
@@ -27,7 +31,7 @@ headers = {
     "Authorization": "Bot " + data['BOT_TOKEN']
 }
 
-response = requests.post(url, headers=headers, json=json_payload)
+response = requests.post(url, headers=headers, json=json_payload, timeout=5)
 
 print('Status Code:', response.status_code)
 print('URL:', response.url)

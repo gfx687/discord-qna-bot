@@ -1,10 +1,14 @@
-import requests
+# pylint: disable=C0103 # snake_case name for script
+
 import json
+
+import requests
 
 with open('bot-control-commands/secrets.json', 'r') as file:
     data = json.load(file)
 
-url = f"https://discord.com/api/v10/applications/{data['APPLICATION_ID']}/commands"
+url = f"https://discord.com/api/v10/applications/{
+    data['APPLICATION_ID']}/commands"
 
 json_payload = {
     "name": "qna-delete",
