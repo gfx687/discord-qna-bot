@@ -1,5 +1,5 @@
 import {
-ComponentActionRow,
+  ComponentActionRow,
   ComponentType,
   GuildInteractionRequestData,
   GuildModalSubmitRequestData,

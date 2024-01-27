@@ -94,13 +94,11 @@ export async function handleQnaEditModalSubmit(
   if (data == null) {
     return ChatMessageResponse(
       "Question not found. Unless someone deleted it while you were editing something went wrong.",
-      InteractionResponseFlags.EPHEMERAL
+      InteractionResponseFlags.EPHEMERAL,
     );
   }
 
-  const formInputs = interaction.data.components.find((c) =>
-    c.type == ComponentType.ACTION_ROW
-  ) as ComponentActionRow;
+  const formInputs = interaction.data.components.find((c) => c.type == ComponentType.ACTION_ROW) as ComponentActionRow;
 
   const newAnswer = formInputs.components.find((c) =>
     c.type == ComponentType.TEXT_INPUT && c.custom_id == EditModalAnswerInputCustomId

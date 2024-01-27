@@ -12,6 +12,8 @@ import { handleInteraction } from "./handle-commands.ts";
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
   "/discord-bot": home,
+}, {
+  port: 8080,
 });
 
 // The main logic of the Discord Slash Command is defined in this function.
@@ -40,9 +42,9 @@ async function home(request: Request): Promise<Response> {
 
   const interaction: AnyRequestData = JSON.parse(body);
 
-  const response = handleInteraction(interaction)
+  const response = await handleInteraction(interaction);
   if (response) {
-    return json(response)
+    return json(response);
   }
   return json({ error: "bad request" }, { status: 400 });
 }

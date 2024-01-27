@@ -1,6 +1,11 @@
 import { ChatMessageResponse } from "./common.ts";
 import { acronymsData } from "./acronyms-data.ts";
-import { CommandOptionType, CommandStringOption, GuildInteractionRequestData, InteractionResponseFlags } from "npm:slash-create";
+import {
+  CommandOptionType,
+  CommandStringOption,
+  GuildInteractionRequestData,
+  InteractionResponseFlags,
+} from "npm:slash-create";
 import { InteractionResponseReply } from "../types/my-types.ts";
 
 /**
