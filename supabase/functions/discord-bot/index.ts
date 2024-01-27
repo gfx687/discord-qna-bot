@@ -5,8 +5,9 @@ import { json, serve, validateRequest } from "https://deno.land/x/sift@0.6.0/mod
 // TweetNaCl is a cryptography library that we use to verify requests
 // from Discord.
 import nacl from "https://cdn.skypack.dev/tweetnacl@v1.0.3?dts";
-import { Interaction, InteractionType } from "./types/types.ts";
-import { handleAutocomplete, handleCommands, handleMessageComponent, handleModalSubmit } from "./handle-commands.ts";
+import { AnyRequestData } from "npm:slash-create";
+
+import { handleInteraction } from "./handle-commands.ts";
 
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
@@ -33,36 +34,16 @@ async function home(request: Request): Promise<Response> {
   if (!valid) {
     return json(
       { error: "Invalid request" },
-      {
-        status: 401,
-      },
+      { status: 401 },
     );
   }
 
-  const interaction: Interaction = JSON.parse(body);
+  const interaction: AnyRequestData = JSON.parse(body);
 
-  if (interaction.type === InteractionType.Ping) {
-    return json({
-      type: 1, // Type 1 in a response is a Pong interaction response type.
-    });
+  const response = handleInteraction(interaction)
+  if (response) {
+    return json(response)
   }
-  if (interaction.type === InteractionType.ApplicationCommand) {
-    const response = await handleCommands(interaction);
-    return json(response);
-  }
-  if (interaction.type === InteractionType.MessageComponent) {
-    const response = handleMessageComponent(interaction);
-    return json(response);
-  }
-  if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
-    const response = await handleAutocomplete(interaction);
-    return json(response);
-  }
-  if (interaction.type === InteractionType.ModalSubmit) {
-    const response = await handleModalSubmit(interaction);
-    return json(response);
-  }
-
   return json({ error: "bad request" }, { status: 400 });
 }
 

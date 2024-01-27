@@ -1,21 +1,30 @@
 import { supabase } from "../../_shared/supabaseClient.ts";
-import {
-  MessageComponentActionRow,
-  MessageComponentTextInput,
-  MessageComponentTextInputStyle,
-  MessageComponentType,
-} from "../types/message-component-types.ts";
-import { CommandInteraction, ModalSubmitInteraction } from "../types/types.ts";
-import { InteractionResponse, InteractionResponseType, MessageFlags } from "../types/interaction-response-types.ts";
+import { InteractionResponseModal, InteractionResponseReply } from "../types/my-types.ts";
 import { ChatMessageResponse } from "./common.ts";
+import {
+  CommandOptionType,
+  CommandStringOption,
+  ComponentActionRow,
+  ComponentTextInput,
+  ComponentType,
+  GuildInteractionRequestData,
+  GuildModalSubmitRequestData,
+  InteractionResponseFlags,
+  InteractionResponseType,
+  TextInputStyle,
+} from "npm:slash-create";
 
 export const EditModalCustomId = "qna_edit_modal";
 export const EditModalAnswerInputCustomId = "qna_edit_modal_new_answer";
 
-export async function handleQnaEditCommand(interaction: CommandInteraction): Promise<InteractionResponse> {
-  const option = interaction.data.options.find((option) => option.name === "question");
+export async function handleQnaEditCommand(
+  interaction: GuildInteractionRequestData,
+): Promise<InteractionResponseReply | InteractionResponseModal> {
+  const option = interaction.data.options?.find((option) =>
+    option.name === "question" && option.type == CommandOptionType.STRING
+  ) as CommandStringOption | undefined;
   if (option == null || option.value == null || option.value.trim() == "") {
-    return ChatMessageResponse("Question cannot be empty when using edit command.", MessageFlags.Ephemeral);
+    return ChatMessageResponse("Question cannot be empty when using edit command.", InteractionResponseFlags.EPHEMERAL);
   }
 
   const { data } = await supabase.from("qna")
@@ -27,7 +36,7 @@ export async function handleQnaEditCommand(interaction: CommandInteraction): Pro
   if (data == null) {
     return ChatMessageResponse(
       "No question found. Make sure to provide full name of the question, edit command does not allow for ambiguity in search term.",
-      MessageFlags.Ephemeral,
+      InteractionResponseFlags.EPHEMERAL,
     );
   }
 
@@ -48,19 +57,19 @@ export async function handleQnaEditCommand(interaction: CommandInteraction): Pro
 
   if (insertResult.error) {
     console.error(insertResult.error);
-    return ChatMessageResponse("Something went wrong.", MessageFlags.Ephemeral);
+    return ChatMessageResponse("Something went wrong.", InteractionResponseFlags.EPHEMERAL);
   }
 
   return {
-    type: InteractionResponseType.Modal,
+    type: InteractionResponseType.MODAL,
     data: {
       custom_id: processId,
       title: `Question: "${data.question}"`,
       components: [{
-        type: MessageComponentType.ActionRow,
+        type: ComponentType.ACTION_ROW,
         components: [{
-          type: MessageComponentType.TextInput,
-          style: MessageComponentTextInputStyle.Paragraph,
+          type: ComponentType.TEXT_INPUT,
+          style: TextInputStyle.PARAGRAPH,
           label: "New answer",
           custom_id: EditModalAnswerInputCustomId,
           min_length: 1,
@@ -74,7 +83,9 @@ export async function handleQnaEditCommand(interaction: CommandInteraction): Pro
   };
 }
 
-export async function handleQnaEditModalSubmit(interaction: ModalSubmitInteraction): Promise<InteractionResponse> {
+export async function handleQnaEditModalSubmit(
+  interaction: GuildModalSubmitRequestData,
+): Promise<InteractionResponseReply> {
   const { data } = await supabase.from("qna_edit_processes")
     .select()
     .eq("process_id", interaction.data.custom_id)
@@ -83,19 +94,19 @@ export async function handleQnaEditModalSubmit(interaction: ModalSubmitInteracti
   if (data == null) {
     return ChatMessageResponse(
       "Question not found. Unless someone deleted it while you were editing something went wrong.",
-      MessageFlags.Ephemeral,
+      InteractionResponseFlags.EPHEMERAL
     );
   }
 
   const formInputs = interaction.data.components.find((c) =>
-    c.type == MessageComponentType.ActionRow
-  ) as MessageComponentActionRow;
+    c.type == ComponentType.ACTION_ROW
+  ) as ComponentActionRow;
 
   const newAnswer = formInputs.components.find((c) =>
-    c.type == MessageComponentType.TextInput && c.custom_id == EditModalAnswerInputCustomId
-  ) as MessageComponentTextInput;
+    c.type == ComponentType.TEXT_INPUT && c.custom_id == EditModalAnswerInputCustomId
+  ) as ComponentTextInput;
   if (newAnswer == null || newAnswer.value == null || newAnswer.value.trim() == "") {
-    return ChatMessageResponse("Invalid answer was provided.", MessageFlags.Ephemeral);
+    return ChatMessageResponse("Invalid answer was provided.", InteractionResponseFlags.EPHEMERAL);
   }
 
   const updateResult = await supabase
@@ -107,7 +118,7 @@ export async function handleQnaEditModalSubmit(interaction: ModalSubmitInteracti
     .maybeSingle();
   if (updateResult.data == null || updateResult.error) {
     console.error(updateResult.error);
-    return ChatMessageResponse("Something went wrong.", MessageFlags.Ephemeral);
+    return ChatMessageResponse("Something went wrong.", InteractionResponseFlags.EPHEMERAL);
   }
 
   return ChatMessageResponse(`Saved new answer to question "${data.question}".\n\n${updateResult.data.answer}`);

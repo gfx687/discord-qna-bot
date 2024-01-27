@@ -1,14 +1,71 @@
+import { supabase } from "../_shared/supabaseClient.ts";
 import { handleCommandNotFound } from "./slash-commands/not-implemented.ts";
 import { handleQnaAutocomplete, handleQnaCommand } from "./slash-commands/qna-search.ts";
-import { CommandInteraction, InteractionDataOption, MessageComponentInteraction, ModalSubmitInteraction } from "./types/types.ts";
-import { InteractionResponse, InteractionResponseType, MessageFlags } from "./types/interaction-response-types.ts";
 import { EditModalCustomId, handleQnaEditCommand, handleQnaEditModalSubmit } from "./slash-commands/qna-edit.ts";
 import { handleQnaDeleteCommand } from "./slash-commands/qna-delete.ts";
 import { handleQnaNewCommand, handleQnaNewModalSubmit, NewQuestionModalCustomId } from "./slash-commands/qna-new.ts";
-import { supabase } from "../_shared/supabaseClient.ts";
 import { handleAcronymSearch } from "./slash-commands/acronyms.ts";
+import {
+  AnyRequestData,
+  CommandAutocompleteRequestData,
+  CommandOptionType,
+  CommandStringOption,
+  GuildCommandAutocompleteRequestData,
+  GuildInteractionRequestData,
+  GuildMessageComponentRequestData,
+  GuildModalSubmitRequestData,
+  InteractionRequestData,
+  InteractionResponseFlags,
+  InteractionResponseType,
+  InteractionType,
+  MessageComponentRequestData,
+  ModalSubmitRequestData,
+} from "npm:slash-create";
+import {
+  GuildRequestData,
+  InteractionResponse,
+  InteractionResponseAutocomplete,
+  InteractionResponseModal,
+  InteractionResponseReply,
+} from "./types/my-types.ts";
 
-export async function handleCommands(interaction: CommandInteraction): Promise<InteractionResponse> {
+export async function handleInteraction(interaction: AnyRequestData): Promise<InteractionResponse | undefined> {
+  if (interaction.type === InteractionType.PING) {
+    return {
+      type: InteractionResponseType.PONG,
+    };
+  }
+
+  // bot only works for discord servers at the moment, not DMs
+  // so here is a little hack to not do similar DMs vs Guild check in every command
+  if (!isGuildRequest(interaction)) {
+    return handleCommandNotFound(interaction);
+  }
+
+  if (interaction.type === InteractionType.APPLICATION_COMMAND) {
+    const response = await handleCommands(interaction);
+    return response;
+  }
+  if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
+    const response = handleMessageComponent(interaction);
+    return response;
+  }
+  if (interaction.type === InteractionType.APPLICATION_COMMAND_AUTOCOMPLETE) {
+    const response = await handleAutocomplete(interaction);
+    return response;
+  }
+  if (interaction.type === InteractionType.MODAL_SUBMIT) {
+    const response = await handleModalSubmit(interaction);
+    return response;
+  }
+
+  // bad request
+  return undefined;
+}
+
+export async function handleCommands(
+  interaction: GuildInteractionRequestData,
+): Promise<InteractionResponseReply | InteractionResponseModal> {
   await LogInvocation(interaction);
 
   switch (interaction.data.name) {
@@ -27,36 +84,36 @@ export async function handleCommands(interaction: CommandInteraction): Promise<I
   }
 }
 
-export async function handleAutocomplete(interaction: CommandInteraction): Promise<InteractionResponse> {
+export async function handleAutocomplete(
+  interaction: GuildCommandAutocompleteRequestData,
+): Promise<InteractionResponseReply | InteractionResponseAutocomplete> {
   switch (interaction.data.name) {
     case "qna":
-      return await handleQnaAutocomplete(interaction);
     case "qna-edit":
-      return await handleQnaAutocomplete(interaction);
     case "qna-delete":
       return await handleQnaAutocomplete(interaction);
     default:
       return {
-        type: InteractionResponseType.ApplicationCommandAutocompleteResult,
+        type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
         data: { choices: [] },
       };
   }
 }
 
-export function handleMessageComponent(interaction: MessageComponentInteraction): InteractionResponse {
+export function handleMessageComponent(interaction: GuildMessageComponentRequestData): InteractionResponseReply {
   switch (interaction.data.custom_id) {
     default:
       return {
-        type: InteractionResponseType.ChannelMessageWithSource,
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           content: "Something went wrong. Handler not found.",
-          flags: MessageFlags.Ephemeral,
+          flags: InteractionResponseFlags.EPHEMERAL,
         },
       };
   }
 }
 
-export async function handleModalSubmit(interaction: ModalSubmitInteraction): Promise<InteractionResponse> {
+export async function handleModalSubmit(interaction: GuildModalSubmitRequestData): Promise<InteractionResponseReply> {
   if (interaction.data.custom_id.startsWith(EditModalCustomId)) {
     return await handleQnaEditModalSubmit(interaction);
   }
@@ -65,19 +122,23 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
   }
 
   return {
-    type: InteractionResponseType.ChannelMessageWithSource,
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       content: "Something went wrong. Handler not found.",
-      flags: MessageFlags.Ephemeral,
+      flags: InteractionResponseFlags.EPHEMERAL,
     },
   };
 }
 
-export async function LogInvocation(interaction: CommandInteraction) {
-  let option: InteractionDataOption | undefined = undefined
-  option = interaction.data?.options?.find((option) => option.name === "question");
+export async function LogInvocation(interaction: GuildInteractionRequestData) {
+  let option: CommandStringOption | undefined = undefined;
+  option = interaction.data?.options?.find((option) =>
+    option.name === "question" && option.type == CommandOptionType.STRING
+  ) as CommandStringOption | undefined;
   if (!option) {
-    option = interaction.data.options.find((option) => option.name === "acronym");
+    option = interaction.data?.options?.find((option) =>
+      option.name === "acronym" && option.type == CommandOptionType.STRING
+    ) as CommandStringOption | undefined;
   }
 
   await supabase.from("command_invocations_log")
@@ -90,4 +151,13 @@ export async function LogInvocation(interaction: CommandInteraction) {
       question: option?.value || "<unknown>",
     })
     .select();
+}
+
+function isGuildRequest(
+  data: InteractionRequestData | MessageComponentRequestData | CommandAutocompleteRequestData | ModalSubmitRequestData,
+): data is GuildRequestData {
+  if ("guild_id" in data) {
+    return true;
+  }
+  return false;
 }

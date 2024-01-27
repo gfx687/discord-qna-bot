@@ -9,12 +9,11 @@ Discord Bot with Questions and Answers (Q&A) functionality created using exclusi
 Creating a bot using only the Interactions API (slash commands) allows the bot to be deployed **serverless** and receive all updates from Discord instead of hosting bot 24/7 and querying the Discord Gateway API.
 
 ## Tech Stack
-- **Hosting** - [Supabase](https://supabase.com/), Backend as a Service solution  
-    Provides PostgreSQL database and Edge Functions runtime
 - **Language** - TypeScript and Deno  
     Because Supabase uses Deno as Edge Functions platform
-- **Discord Library** - none  
-    At first I looked at [Discord.js](https://github.com/discordjs/discord.js) but it is a library for Discord's Gateway API rather than Interactions API. Meaning intended to be used for hosted bots that pull Discord updates, rather than have Discord deliver updates to the bot, which makes it unsuited for hosting serverless with just edge functions.
+- **Discord Library** - [slash-create](https://github.com/Snazzah/slash-create)
+- **Hosting** - [Supabase](https://supabase.com/), Backend as a Service solution  
+    Provides PostgreSQL database and Edge Functions runtime
 
 ## Known Issues and Caveats
 1) Currently, slash commands do not support multi-line inputs - https://github.com/discord/discord-api-docs/issues/2381

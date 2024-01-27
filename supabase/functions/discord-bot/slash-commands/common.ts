@@ -1,8 +1,12 @@
-import { InteractionResponse, InteractionResponseType, MessageFlags } from "../types/interaction-response-types.ts";
+import { InteractionResponseFlags, InteractionResponseType } from "npm:slash-create";
+import { InteractionResponseReply } from "../types/my-types.ts";
 
-export function ChatMessageResponse(text: string, flags: MessageFlags | undefined = undefined): InteractionResponse {
+export function ChatMessageResponse(
+  text: string,
+  flags: InteractionResponseFlags | undefined = undefined,
+): InteractionResponseReply {
   return {
-    type: InteractionResponseType.ChannelMessageWithSource,
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       content: text,
       flags: flags,

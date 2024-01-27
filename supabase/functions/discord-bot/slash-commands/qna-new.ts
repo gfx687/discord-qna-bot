@@ -1,12 +1,15 @@
 import {
-  MessageComponentActionRow,
-  MessageComponentTextInputStyle,
-  MessageComponentType,
-} from "../types/message-component-types.ts";
-import { CommandInteraction, ModalSubmitInteraction } from "../types/types.ts";
-import { InteractionResponse, InteractionResponseType, MessageFlags } from "../types/interaction-response-types.ts";
+ComponentActionRow,
+  ComponentType,
+  GuildInteractionRequestData,
+  GuildModalSubmitRequestData,
+  InteractionResponseFlags,
+  InteractionResponseType,
+  TextInputStyle,
+} from "npm:slash-create";
 import { supabase } from "../../_shared/supabaseClient.ts";
 import { ChatMessageResponse } from "./common.ts";
+import { InteractionResponseModal, InteractionResponseReply } from "../types/my-types.ts";
 
 export const NewQuestionModalCustomId = "qna_new_modal";
 const NewQuestionModalQuestionCustomId = "qna_new_modal_question";
@@ -14,19 +17,19 @@ const NewQuestionModalAnswerCustomId = "qna_new_modal_answer";
 
 const UniqueViolationPostgresError = "23505";
 
-export function handleQnaNewCommand(_interaction: CommandInteraction): InteractionResponse {
+export function handleQnaNewCommand(_interaction: GuildInteractionRequestData): InteractionResponseModal {
   return {
-    type: InteractionResponseType.Modal,
+    type: InteractionResponseType.MODAL,
     data: {
       custom_id: NewQuestionModalCustomId,
       title: "New question",
       components: [
         {
-          type: MessageComponentType.ActionRow,
+          type: ComponentType.ACTION_ROW,
           components: [
             {
-              type: MessageComponentType.TextInput,
-              style: MessageComponentTextInputStyle.Short,
+              type: ComponentType.TEXT_INPUT,
+              style: TextInputStyle.SHORT,
               label: "Question",
               custom_id: NewQuestionModalQuestionCustomId,
               min_length: 1,
@@ -37,11 +40,11 @@ export function handleQnaNewCommand(_interaction: CommandInteraction): Interacti
           ],
         },
         {
-          type: MessageComponentType.ActionRow,
+          type: ComponentType.ACTION_ROW,
           components: [
             {
-              type: MessageComponentType.TextInput,
-              style: MessageComponentTextInputStyle.Paragraph,
+              type: ComponentType.TEXT_INPUT,
+              style: TextInputStyle.PARAGRAPH,
               label: "Answer",
               custom_id: NewQuestionModalAnswerCustomId,
               min_length: 1,
@@ -56,27 +59,29 @@ export function handleQnaNewCommand(_interaction: CommandInteraction): Interacti
   };
 }
 
-export async function handleQnaNewModalSubmit(interaction: ModalSubmitInteraction): Promise<InteractionResponse> {
+export async function handleQnaNewModalSubmit(
+  interaction: GuildModalSubmitRequestData,
+): Promise<InteractionResponseReply> {
   let question: string | undefined;
   let answer: string | undefined;
 
-  const actionRows = interaction.data.components.map((x) => x as MessageComponentActionRow);
+  const actionRows = interaction.data.components.map((x) => x as ComponentActionRow);
   for (const actionRow of actionRows) {
     for (const textInput of actionRow.components) {
-      if (textInput.type == MessageComponentType.TextInput && textInput.custom_id == NewQuestionModalQuestionCustomId) {
+      if (textInput.type == ComponentType.TEXT_INPUT && textInput.custom_id == NewQuestionModalQuestionCustomId) {
         question = textInput.value;
       }
-      if (textInput.type == MessageComponentType.TextInput && textInput.custom_id == NewQuestionModalAnswerCustomId) {
+      if (textInput.type == ComponentType.TEXT_INPUT && textInput.custom_id == NewQuestionModalAnswerCustomId) {
         answer = textInput.value;
       }
     }
   }
 
   if (question == null || question.trim() == "") {
-    return ChatMessageResponse("Question field must not be empty.", MessageFlags.Ephemeral);
+    return ChatMessageResponse("Question field must not be empty.", InteractionResponseFlags.EPHEMERAL);
   }
   if (answer == "error" || answer == null || answer.trim() == "") {
-    return ChatMessageResponse("Answer field must not be empty.", MessageFlags.Ephemeral);
+    return ChatMessageResponse("Answer field must not be empty.", InteractionResponseFlags.EPHEMERAL);
   }
 
   const insertResult = await supabase
@@ -93,10 +98,10 @@ export async function handleQnaNewModalSubmit(interaction: ModalSubmitInteractio
 
   if (insertResult.error) {
     if (insertResult.error.code == UniqueViolationPostgresError) {
-      return ChatMessageResponse(`Question "${question}" already exists.`, MessageFlags.Ephemeral);
+      return ChatMessageResponse(`Question "${question}" already exists.`, InteractionResponseFlags.EPHEMERAL);
     }
     console.error(insertResult.error);
-    return ChatMessageResponse("Something went wrong.", MessageFlags.Ephemeral);
+    return ChatMessageResponse("Something went wrong.", InteractionResponseFlags.EPHEMERAL);
   }
 
   return ChatMessageResponse(

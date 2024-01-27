@@ -1,15 +1,24 @@
 import { supabase } from "../../_shared/supabaseClient.ts";
-import { CommandInteraction } from "../types/types.ts";
-import { InteractionResponse, InteractionResponseType, MessageFlags } from "../types/interaction-response-types.ts";
+import { InteractionResponseAutocomplete, InteractionResponseReply } from "../types/my-types.ts";
 import { ChatMessageResponse } from "./common.ts";
+import {
+  CommandOptionType,
+  CommandStringOption,
+  GuildCommandAutocompleteRequestData,
+  GuildInteractionRequestData,
+  InteractionResponseFlags,
+  InteractionResponseType,
+} from "npm:slash-create";
 
-export async function handleQnaAutocomplete(interaction: CommandInteraction): Promise<InteractionResponse> {
+export async function handleQnaAutocomplete(
+  interaction: GuildCommandAutocompleteRequestData,
+): Promise<InteractionResponseAutocomplete> {
   const option = interaction.data.options.find(
-    (option) => option.name === "question" && option.focused,
-  );
+    (option) => option.name === "question" && option.type == CommandOptionType.STRING && option.focused,
+  ) as CommandStringOption | undefined;
   if (option?.value == null || option.value.trim() == "") {
     return {
-      type: InteractionResponseType.ApplicationCommandAutocompleteResult,
+      type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
       data: { choices: [] },
     };
   }
@@ -20,17 +29,21 @@ export async function handleQnaAutocomplete(interaction: CommandInteraction): Pr
   });
 
   return {
-    type: InteractionResponseType.ApplicationCommandAutocompleteResult,
+    type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
     data: {
       choices: data == null ? [] : data.map((x) => ({ name: x.question, value: x.question })),
     },
   };
 }
 
-export async function handleQnaCommand(interaction: CommandInteraction): Promise<InteractionResponse> {
-  const option = interaction.data.options.find((option) => option.name === "question");
+export async function handleQnaCommand(
+  interaction: GuildInteractionRequestData,
+): Promise<InteractionResponseReply> {
+  const option = interaction.data.options?.find((option) =>
+    option.name === "question" && option.type == CommandOptionType.STRING
+  ) as CommandStringOption | undefined;
   if (option == null || option.value == null || option.value.trim() == "") {
-    return ChatMessageResponse("Invalid question or something went wrong.", MessageFlags.Ephemeral);
+    return ChatMessageResponse("Invalid question or something went wrong.", InteractionResponseFlags.EPHEMERAL);
   }
 
   const { data } = await supabase.rpc("search_questions", {

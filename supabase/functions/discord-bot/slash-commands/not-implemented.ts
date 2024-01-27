@@ -1,10 +1,10 @@
-import { CommandInteraction } from "../types/types.ts";
-import { InteractionResponse, MessageFlags } from "../types/interaction-response-types.ts";
+import { AnyRequestData, InteractionResponseFlags } from "npm:slash-create";
+import { InteractionResponseReply } from "../types/my-types.ts";
 import { ChatMessageResponse } from "./common.ts";
 
-export function handleCommandNotFound(_interaction: CommandInteraction): InteractionResponse {
+export function handleCommandNotFound(_interaction: AnyRequestData): InteractionResponseReply {
   return ChatMessageResponse(
-    "If you see this command then probably command you actually requested is not implemented yet.",
-    MessageFlags.Ephemeral,
+    "If you see this message then command you requested probably does not exist.",
+    InteractionResponseFlags.EPHEMERAL,
   );
 }
