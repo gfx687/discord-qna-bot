@@ -28,6 +28,7 @@ import {
   InteractionResponseModal,
   InteractionResponseReply,
 } from "./types/my-types.ts";
+import { handleQnaHelp } from "./slash-commands/qna-help.ts";
 
 export async function handleInteraction(interaction: AnyRequestData): Promise<InteractionResponse | undefined> {
   if (interaction.type === InteractionType.PING) {
@@ -77,6 +78,8 @@ export async function handleCommands(
       return await handleQnaDeleteCommand(interaction);
     case "qna-new":
       return handleQnaNewCommand(interaction);
+    case "qna-help":
+      return handleQnaHelp();
     case "acronym":
       return handleAcronymSearch(interaction);
     default:
