@@ -1,3 +1,6 @@
 node_modules
 .tempfiles
 deno.lock
+.vim
+.idea
+.vscode
