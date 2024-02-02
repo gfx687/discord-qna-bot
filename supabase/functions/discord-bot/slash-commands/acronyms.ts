@@ -27,7 +27,7 @@ export function handleAcronymSearch(
   const matches = acronymsData.get(option.value.toUpperCase());
   if (!matches) {
     return ChatMessageResponse(
-      `No acronyms matching ${option.value} found.\n\nTry \`/qna\` command if what you are looking for is not an acronym.`,
+      `No acronyms matching '${option.value}' found.\n\nTry \`/qna\` command if what you are looking for is not an acronym.`,
       InteractionResponseFlags.EPHEMERAL,
     );
   }

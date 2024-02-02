@@ -30,7 +30,7 @@ export const acronymsData = new Map<string, Acronym[]>([
         { name: 'SB', class: 'Driller', fullName: 'Snowball', weaponName: 'Cryo Cannon', type: 'Overclock' },
         { name: 'SB', class: 'Driller', fullName: 'Sludge Blast', weaponName: 'Corrosive Sludge Pump', type: 'Overclock' },
     ]],
-    [ 'AG', [ { name: 'AG', class: 'Driller', fullName: 'AG Mixture', weaponName: '', type: 'Overclock' } ] ],
+    [ 'AG', [ { name: 'AG', class: 'Driller', fullName: 'AG Mixture', weaponName: 'Corrosive Sludge Pump', type: 'Overclock' } ] ],
     [ 'DC', [ { name: 'DC', class: 'Driller', fullName: 'Disperser Compound', weaponName: 'Corrosive Sludge Pump', type: 'Overclock' } ] ],
     [ 'GBS', [ { name: 'GBS', class: 'Driller', fullName: 'Goo Bomber Special', weaponName: 'Corrosive Sludge Pump', type: 'Overclock' } ] ],
     [ 'HIA', [ { name: 'HIA', class: 'Driller', fullName: 'Hydrogen Ion Additive', weaponName: 'Corrosive Sludge Pump', type: 'Overclock' } ] ],
