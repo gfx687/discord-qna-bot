@@ -1,4 +1,3 @@
-import { supabase } from "../_shared/supabaseClient.ts";
 import { handleCommandNotFound } from "./slash-commands/not-implemented.ts";
 import { handleQnaAutocomplete, handleQnaCommand } from "./slash-commands/qna-search.ts";
 import { EditModalCustomId, handleQnaEditCommand, handleQnaEditModalSubmit } from "./slash-commands/qna-edit.ts";
@@ -8,7 +7,6 @@ import { handleAcronymSearch } from "./slash-commands/acronyms.ts";
 import {
   AnyRequestData,
   CommandAutocompleteRequestData,
-  CommandOptionType,
   CommandStringOption,
   GuildCommandAutocompleteRequestData,
   GuildInteractionRequestData,
@@ -27,8 +25,11 @@ import {
   InteractionResponseAutocomplete,
   InteractionResponseModal,
   InteractionResponseReply,
-} from "./types/my-types.ts";
+} from "./data/discord-types.ts";
 import { handleQnaHelp } from "./slash-commands/qna-help.ts";
+import { saveInvocationLog } from "./data/invocation-log-repository.ts";
+import { invocationLogInsertZod } from "./data/invocation-log-types.ts";
+import { getInteractionOptionString } from "./slash-commands/common.ts";
 
 export async function handleInteraction(interaction: AnyRequestData): Promise<InteractionResponse | undefined> {
   if (interaction.type === InteractionType.PING) {
@@ -40,7 +41,7 @@ export async function handleInteraction(interaction: AnyRequestData): Promise<In
   // bot only works for discord servers at the moment, not DMs
   // so here is a little hack to not do similar DMs vs Guild check in every command
   if (!isGuildRequest(interaction)) {
-    return handleCommandNotFound(interaction);
+    return handleCommandNotFound();
   }
 
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
@@ -81,9 +82,9 @@ export async function handleCommands(
     case "qna-help":
       return handleQnaHelp();
     case "acronym":
-      return handleAcronymSearch(interaction);
+      return await handleAcronymSearch(interaction);
     default:
-      return handleCommandNotFound(interaction);
+      return handleCommandNotFound();
   }
 }
 
@@ -134,33 +135,30 @@ export async function handleModalSubmit(interaction: GuildModalSubmitRequestData
 }
 
 export async function LogInvocation(interaction: GuildInteractionRequestData) {
-  let option: CommandStringOption | undefined = undefined;
-  option = interaction.data?.options?.find((option) =>
-    option.name === "question" && option.type == CommandOptionType.STRING
-  ) as CommandStringOption | undefined;
+  let option: CommandStringOption | undefined;
+  option = getInteractionOptionString(interaction, "question");
   if (!option) {
-    option = interaction.data?.options?.find((option) =>
-      option.name === "acronym" && option.type == CommandOptionType.STRING
-    ) as CommandStringOption | undefined;
+    option = getInteractionOptionString(interaction, "acronym");
   }
 
-  await supabase.from("command_invocations_log")
-    .insert({
-      guild_id: interaction.guild_id,
-      user_id: interaction.member.user.id,
+  try {
+    const log = invocationLogInsertZod.parse({
+      guildId: interaction.guild_id,
+      userId: interaction.member.user.id,
       username: interaction.member.user.username,
-      user_global_name: interaction.member.user.global_name,
+      userGlobalName: interaction.member.user.global_name,
       command: interaction.data.name,
       question: option?.value || "<unknown>",
-    })
-    .select();
+    });
+
+    await saveInvocationLog(log);
+  } catch (err) {
+    console.error(`LogInvocation failure: ${err}`);
+  }
 }
 
 function isGuildRequest(
   data: InteractionRequestData | MessageComponentRequestData | CommandAutocompleteRequestData | ModalSubmitRequestData,
 ): data is GuildRequestData {
-  if ("guild_id" in data) {
-    return true;
-  }
-  return false;
+  return "guild_id" in data;
 }

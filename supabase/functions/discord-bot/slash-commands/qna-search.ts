@@ -1,5 +1,5 @@
 import { supabase } from "../../_shared/supabaseClient.ts";
-import { InteractionResponseAutocomplete, InteractionResponseReply } from "../types/my-types.ts";
+import { InteractionResponseAutocomplete, InteractionResponseReply } from "../data/discord-types.ts";
 import { ChatMessageResponse } from "./common.ts";
 import {
   CommandOptionType,

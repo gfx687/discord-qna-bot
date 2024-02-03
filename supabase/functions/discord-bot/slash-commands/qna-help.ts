@@ -1,5 +1,5 @@
 import { InteractionResponseFlags } from "npm:slash-create";
-import { InteractionResponseReply } from "../types/my-types.ts";
+import { InteractionResponseReply } from "../data/discord-types.ts";
 import { ChatMessageResponse } from "./common.ts";
 
 export function handleQnaHelp(): InteractionResponseReply {

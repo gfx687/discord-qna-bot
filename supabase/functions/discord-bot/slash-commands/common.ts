@@ -1,5 +1,11 @@
-import { InteractionResponseFlags, InteractionResponseType } from "npm:slash-create";
-import { InteractionResponseReply } from "../types/my-types.ts";
+import {
+  CommandOptionType,
+  CommandStringOption,
+  InteractionRequestData,
+  InteractionResponseFlags,
+  InteractionResponseType,
+} from "npm:slash-create";
+import { InteractionResponseReply } from "../data/discord-types.ts";
 
 export function ChatMessageResponse(
   text: string,
@@ -12,4 +18,13 @@ export function ChatMessageResponse(
       flags: flags,
     },
   };
+}
+
+export function getInteractionOptionString(
+  interaction: InteractionRequestData,
+  name: string,
+): CommandStringOption | undefined {
+  return interaction.data?.options?.find((option) => option.name === name && option.type == CommandOptionType.STRING) as
+    | CommandStringOption
+    | undefined;
 }

@@ -9,7 +9,7 @@ import {
 } from "npm:slash-create";
 import { supabase } from "../../_shared/supabaseClient.ts";
 import { ChatMessageResponse } from "./common.ts";
-import { InteractionResponseModal, InteractionResponseReply } from "../types/my-types.ts";
+import { InteractionResponseModal, InteractionResponseReply } from "../data/discord-types.ts";
 
 export const NewQuestionModalCustomId = "qna_new_modal";
 const NewQuestionModalQuestionCustomId = "qna_new_modal_question";

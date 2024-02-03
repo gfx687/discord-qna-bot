@@ -6,7 +6,7 @@ import {
 } from "npm:slash-create";
 import { supabase } from "../../_shared/supabaseClient.ts";
 import { ChatMessageResponse } from "./common.ts";
-import { InteractionResponseReply } from "../types/my-types.ts";
+import { InteractionResponseReply } from "../data/discord-types.ts";
 
 export const EditModalCustomId = "qna_edit_modal";
 export const EditModalAnswerInputCustomId = "qna_edit_modal_new_answer";
