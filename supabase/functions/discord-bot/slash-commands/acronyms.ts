@@ -22,7 +22,7 @@ export async function handleAcronymSearch(
 
   if (acronyms.length == 0) {
     return ChatMessageResponse(
-      `No acronyms matching '${option.value.toUpperCase()}' found.\n\nTry \`/qna\` command if what you are looking for is not an acronym.`,
+      `No acronyms matching '${option.value.toUpperCase()}' found.\n\nTry \`/qna\` command, maybe someone added an answer manually.`,
       InteractionResponseFlags.EPHEMERAL,
     );
   }
@@ -40,15 +40,15 @@ export async function handleAcronymSearch(
  * Found definitions for ER:
  *
  * Overclocks:
- *      - Elecrifying Reload - Overclock for Scout's GK2
- *      - Explosive Reload - Overclock for Driller's Subata 120
+ * - Elecrifying Reload - Scout's GK2
+ * - Explosive Reload - Driller's Subata 120
  *
  * Weapon Mods:
- *      - Exothermic Reactor - Weapon Mod (t5C) for Driller's wave cooker
+ * - Exothermic Reactor - t5C for Driller's wave cooker
  */
 function buildAcronymMessage(acronyms: Acronym[]): string {
-  if (acronyms.length === 0) {
-    return "No acronyms found.\n\nTry \`/qna\` command if what you are looking for is not an acronym.";
+  if (acronyms.length == 0) {
+    return "No matches found.";
   }
 
   const grouped = acronyms.reduce<{ [k: string]: Acronym[] }>((acc, next) => {
