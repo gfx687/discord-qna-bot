@@ -1,11 +1,8 @@
-import {z} from "https://deno.land/x/zod@v3.22.4/index.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/index.ts";
 
 const envSchema = z.object({
-    DB_CONNECTION_STRING: z.string(),
-    DISCORD_PUBLIC_KEY: z.string(),
-    SUPABASE_URL: z.string(),
-    SUPABASE_SERVICE_ROLE_KEY: z.string(),
-})
+  DB_CONNECTION_STRING: z.string(),
+  DISCORD_PUBLIC_KEY: z.string(),
+});
 
-export const ENV = envSchema.parse(Deno.env.toObject())
-
+export const ENV = envSchema.parse(Deno.env.toObject());
