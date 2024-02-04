@@ -1,32 +1,70 @@
-import { ChatMessageResponse } from "./common.ts";
-import { acronymsData } from "./acronyms-data.ts";
-import {
-  CommandOptionType,
-  CommandStringOption,
-  GuildInteractionRequestData,
-  InteractionResponseFlags,
-} from "npm:slash-create";
-import { InteractionResponseReply } from "../types/my-types.ts";
+import { ChatMessageResponse, getInteractionOptionString } from "./common.ts";
+import { GuildInteractionRequestData, InteractionResponseFlags } from "npm:slash-create";
+import { InteractionResponseReply } from "../data/discord-types.ts";
+import { getAcronyms } from "../data/acronym-repository.ts";
+import { Acronym, acronymToString, acronymTypeToString } from "../data/acronym-types.ts";
 
 /**
  * Handler for /acronym command created specifically for DRG discord
  */
-export function handleAcronymSearch(interaction: GuildInteractionRequestData): InteractionResponseReply {
-  const option = interaction.data.options?.find((option) =>
-    option.name === "acronym" && option.type == CommandOptionType.STRING
-  ) as CommandStringOption | undefined;
+export async function handleAcronymSearch(
+  interaction: GuildInteractionRequestData,
+): Promise<InteractionResponseReply> {
+  const option = getInteractionOptionString(interaction, "acronym");
   if (option == null || option.value == null || option.value.trim() == "") {
-    return ChatMessageResponse("Invalid input or something went wrong.", InteractionResponseFlags.EPHEMERAL);
+    return ChatMessageResponse(
+      "Invalid input or something went wrong.",
+      InteractionResponseFlags.EPHEMERAL,
+    );
   }
 
-  const matches = acronymsData.get(option.value.toUpperCase());
-  if (!matches) {
-    return ChatMessageResponse(`No acronyms matching ${option.value} found.`, InteractionResponseFlags.EPHEMERAL);
+  const acronyms = await getAcronyms(interaction.guild_id, option.value);
+
+  if (acronyms.length == 0) {
+    return ChatMessageResponse(
+      `No acronyms matching '${option.value.toUpperCase()}' found.\n\nTry \`/qna\` command, maybe someone added an answer manually.`,
+      InteractionResponseFlags.EPHEMERAL,
+    );
   }
 
-  const content = matches
-    .map((x) => `${x.fullName} - ${x.type} for ${x.class}'s ${x.weaponName}`)
-    .join("\n");
+  const message = buildAcronymMessage(acronyms);
 
-  return ChatMessageResponse(`Found definitions for "${option.value}":\n\n${content}`);
+  return ChatMessageResponse(message);
+}
+
+/**
+ * Takes a lost of Acronyms and builds a message from them.
+ *
+ * Example:
+ *
+ * Found definitions for ER:
+ *
+ * Overclocks:
+ * - Elecrifying Reload - Scout's GK2
+ * - Explosive Reload - Driller's Subata 120
+ *
+ * Weapon Mods:
+ * - Exothermic Reactor - t5C for Driller's wave cooker
+ */
+function buildAcronymMessage(acronyms: Acronym[]): string {
+  if (acronyms.length == 0) {
+    return "No matches found.";
+  }
+
+  const grouped = acronyms.reduce<{ [k: string]: Acronym[] }>((acc, next) => {
+    const key = acronymTypeToString(next.acronymType);
+    acc[key] = acc[key] || [];
+    acc[key].push(next);
+    return acc;
+  }, {});
+
+  let message = `Found definitions for '${acronyms[0].acronym}':\n`;
+  for (const key in grouped) {
+    message += `\n${key}s:\n`;
+    for (const acronym of grouped[key]) {
+      message += `- ${acronymToString(acronym)}\n`;
+    }
+  }
+
+  return message;
 }

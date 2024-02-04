@@ -8,6 +8,7 @@ import nacl from "https://cdn.skypack.dev/tweetnacl@v1.0.3?dts";
 import { AnyRequestData } from "npm:slash-create";
 
 import { handleInteraction } from "./handle-commands.ts";
+import { ENV } from "./env.ts";
 
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
@@ -51,7 +52,7 @@ async function home(request: Request): Promise<Response> {
 
 /** Verify whether the request is coming from Discord. */
 async function verifySignature(request: Request): Promise<{ valid: boolean; body: string }> {
-  const PUBLIC_KEY = Deno.env.get("DISCORD_PUBLIC_KEY")!;
+  const PUBLIC_KEY = ENV.DISCORD_PUBLIC_KEY;
   // Discord sends these headers with every request.
   const signature = request.headers.get("X-Signature-Ed25519")!;
   const timestamp = request.headers.get("X-Signature-Timestamp")!;

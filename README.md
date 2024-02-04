@@ -45,8 +45,7 @@ Creating a bot using only the Interactions API (slash commands) allows the bot t
 ### Run Locally
 1) create `supabase/.env` file with the following environment variables:
     - `DISCORD_PUBLIC_KEY` - to verify that message came from discord
-    - `SUPABASE_URL` - to access database via REST API
-    - `SUPABASE_SERVICE_ROLE_KEY` - to access database via REST API
+    - `DB_CONNECTION_STRING` - to access database
 2) start the bot with
     ```bash
     deno run -A --env=supabase/.env supabase/functions/discord-bot/index.ts
@@ -56,6 +55,11 @@ Creating a bot using only the Interactions API (slash commands) allows the bot t
 4) follow to https://discord.com/developers/applications -> your bot's General Information -> add Interactions Endpoint URL in the format `<your_url_to_reach_local_app>/discord-bot`
 5) if everything is well then you see discord send two interactions to your app - one 401 invalid and one ping-pong
 
+If you want to have a separate local database also do the following:
+1) run `npx supabase start`
+2) `npx supabase status` will give all relevant local links
+3) Make a `supabase/.env.local` file with new connection string and use it instead
+
 ### Deploy
 ```bash
 npx supabase functions deploy discord-bot --no-verify-jwt
@@ -63,6 +67,8 @@ npx supabase functions deploy discord-bot --no-verify-jwt
 
 ### Use Test / Prod bots
 1) create two different bots
-2) create `supabase/.env.test` with Test bot's `DISCORD_PUBLIC_KEY`
+2) create `supabase/.env.test`:
+    - `DISCORD_PUBLIC_KEY` - public key for newly created test bot
+    - `DB_CONNECTION_STRING` - to access database
 3) register all the same commands for Test bot using scripts in `./bot-control-commands`
 4) run bot locally following [run locally](#run-locally) steps while replacing `.env` with `.env.test`

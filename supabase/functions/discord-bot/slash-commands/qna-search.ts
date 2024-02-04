@@ -1,9 +1,8 @@
-import { supabase } from "../../_shared/supabaseClient.ts";
-import { InteractionResponseAutocomplete, InteractionResponseReply } from "../types/my-types.ts";
+import { InteractionResponseAutocomplete, InteractionResponseReply } from "../data/discord-types.ts";
+import { searchQuestions } from "../data/question-repository.ts";
+import { getInteractionOptionString } from "./common.ts";
 import { ChatMessageResponse } from "./common.ts";
 import {
-  CommandOptionType,
-  CommandStringOption,
   GuildCommandAutocompleteRequestData,
   GuildInteractionRequestData,
   InteractionResponseFlags,
@@ -13,9 +12,7 @@ import {
 export async function handleQnaAutocomplete(
   interaction: GuildCommandAutocompleteRequestData,
 ): Promise<InteractionResponseAutocomplete> {
-  const option = interaction.data.options.find(
-    (option) => option.name === "question" && option.type == CommandOptionType.STRING && option.focused,
-  ) as CommandStringOption | undefined;
+  const option = getInteractionOptionString(interaction, "question");
   if (option?.value == null || option.value.trim() == "") {
     return {
       type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
@@ -23,15 +20,12 @@ export async function handleQnaAutocomplete(
     };
   }
 
-  const { data } = await supabase.rpc("search_questions", {
-    search_guild_id: interaction.guild_id,
-    search_term: option.value,
-  });
+  const data = await searchQuestions(interaction.guild_id, option.value);
 
   return {
     type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
     data: {
-      choices: data == null ? [] : data.map((x) => ({ name: x.question, value: x.question })),
+      choices: data.map((x) => ({ name: x.question, value: x.question })),
     },
   };
 }
@@ -39,20 +33,18 @@ export async function handleQnaAutocomplete(
 export async function handleQnaCommand(
   interaction: GuildInteractionRequestData,
 ): Promise<InteractionResponseReply> {
-  const option = interaction.data.options?.find((option) =>
-    option.name === "question" && option.type == CommandOptionType.STRING
-  ) as CommandStringOption | undefined;
-  if (option == null || option.value == null || option.value.trim() == "") {
+  const option = getInteractionOptionString(interaction, "question");
+  if (option?.value == null || option.value.trim() == "") {
     return ChatMessageResponse("Invalid question or something went wrong.", InteractionResponseFlags.EPHEMERAL);
   }
 
-  const { data } = await supabase.rpc("search_questions", {
-    search_guild_id: interaction.guild_id,
-    search_term: option.value,
-  });
+  const data = await searchQuestions(interaction.guild_id, option.value);
 
-  if (data == null || data.length == 0) {
-    return ChatMessageResponse(`No answers were found for question "${option.value}".`);
+  if (data.length == 0) {
+    return ChatMessageResponse(
+      `No answers were found for question "${option.value}".`,
+      InteractionResponseFlags.EPHEMERAL,
+    );
   }
 
   return ChatMessageResponse(data[0].answer);
