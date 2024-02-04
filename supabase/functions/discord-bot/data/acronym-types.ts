@@ -35,7 +35,7 @@ export type AcronymDRGOverclock = AcronymCommon & {
 export type AcronymDRGWeaponMod = AcronymCommon & {
   acronymType: AcronymType.DRGWeaponMod;
   payload: {
-    weaponModName: string;
+    modName: string;
     tier: 1 | 2 | 3 | 4 | 5;
     position: "A" | "B" | "C";
     class: "Scout" | "Engineer" | "Gunner" | "Driller";
@@ -51,7 +51,7 @@ export function acronymToString(acronym: Acronym): string {
       return `${acronym.payload.overclockName} - ${acronym.payload.class}'s ${acronym.payload.weaponName}`;
     case AcronymType.DRGWeaponMod: {
       const tierInfo = `t${acronym.payload.tier}${acronym.payload.position}`;
-      return `${acronym.payload.weaponModName} - ${tierInfo} for ${acronym.payload.class}'s ${acronym.payload.weaponName}`;
+      return `${acronym.payload.modName} - ${tierInfo} for ${acronym.payload.class}'s ${acronym.payload.weaponName}`;
     }
     default: {
       throw new Error(`Unknown AcronymType in ${acronym}`);

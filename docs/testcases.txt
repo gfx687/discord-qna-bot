@@ -1,0 +1,20 @@
+1) autocompletion
+- check that it works for /qna command
+
+2) /qna
+- search for existing question
+- search for non-existing question
+
+3) /qna-new
+- create new question and search it
+- try to reuse existing name
+
+4) /qna-edit
+- edit a question and search it
+
+5) /qna-delete
+- delete a question and search it
+
+6) /acronyms
+- existing acronym with multiple definitions
+- non-existing acronym
