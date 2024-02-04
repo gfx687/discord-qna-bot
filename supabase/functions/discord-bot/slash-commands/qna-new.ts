@@ -7,9 +7,10 @@ import {
   InteractionResponseType,
   TextInputStyle,
 } from "npm:slash-create";
-import { supabase } from "../../_shared/supabaseClient.ts";
 import { ChatMessageResponse } from "./common.ts";
 import { InteractionResponseModal, InteractionResponseReply } from "../data/discord-types.ts";
+import { createQuestion } from "../data/question-repository.ts";
+import { questionZod } from "../data/question-types.ts";
 
 export const NewQuestionModalCustomId = "qna_new_modal";
 const NewQuestionModalQuestionCustomId = "qna_new_modal_question";
@@ -17,6 +18,9 @@ const NewQuestionModalAnswerCustomId = "qna_new_modal_answer";
 
 const UniqueViolationPostgresError = "23505";
 
+/**
+ * Handle initial /qna-new command call and return modal window to gather inputs
+ */
 export function handleQnaNewCommand(_interaction: GuildInteractionRequestData): InteractionResponseModal {
   return {
     type: InteractionResponseType.MODAL,
@@ -59,6 +63,9 @@ export function handleQnaNewCommand(_interaction: GuildInteractionRequestData): 
   };
 }
 
+/**
+ * Handle /qna-new modal window submit and create new question in database accordingly
+ */
 export async function handleQnaNewModalSubmit(
   interaction: GuildModalSubmitRequestData,
 ): Promise<InteractionResponseReply> {
@@ -77,34 +84,26 @@ export async function handleQnaNewModalSubmit(
     }
   }
 
-  if (question == null || question.trim() == "") {
-    return ChatMessageResponse("Question field must not be empty.", InteractionResponseFlags.EPHEMERAL);
-  }
-  if (answer == "error" || answer == null || answer.trim() == "") {
-    return ChatMessageResponse("Answer field must not be empty.", InteractionResponseFlags.EPHEMERAL);
+  const newQuestion = questionZod.safeParse({
+    guildId: interaction.guild_id,
+    question: question,
+    answer: answer,
+  });
+  if (!newQuestion.success) {
+    const issues = newQuestion.error.issues.map((i) => i.message).join("; ");
+    return ChatMessageResponse(`Validation error. Problems: ${issues}.`, InteractionResponseFlags.EPHEMERAL);
   }
 
-  const insertResult = await supabase
-    .from("qna")
-    .insert(
-      {
-        guild_id: interaction.guild_id,
-        question: question,
-        answer: answer,
-      },
-    )
-    .select()
-    .single();
-
-  if (insertResult.error) {
-    if (insertResult.error.code == UniqueViolationPostgresError) {
+  try {
+    await createQuestion(newQuestion.data);
+  } catch (err) {
+    if (err.code == UniqueViolationPostgresError) {
       return ChatMessageResponse(`Question "${question}" already exists.`, InteractionResponseFlags.EPHEMERAL);
     }
-    console.error(insertResult.error);
-    return ChatMessageResponse("Something went wrong.", InteractionResponseFlags.EPHEMERAL);
+    throw err;
   }
 
   return ChatMessageResponse(
-    `New question "${insertResult.data.question}" has been added.\n\n${insertResult.data.answer}`,
+    `New question "${newQuestion.data.question}" has been added.\n\n${newQuestion.data.answer}`,
   );
 }

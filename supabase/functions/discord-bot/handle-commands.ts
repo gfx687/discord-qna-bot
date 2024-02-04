@@ -30,6 +30,7 @@ import { handleQnaHelp } from "./slash-commands/qna-help.ts";
 import { saveInvocationLog } from "./data/invocation-log-repository.ts";
 import { invocationLogInsertZod } from "./data/invocation-log-types.ts";
 import { getInteractionOptionString } from "./slash-commands/common.ts";
+import { ChatMessageResponse } from "./slash-commands/common.ts";
 
 export async function handleInteraction(interaction: AnyRequestData): Promise<InteractionResponse | undefined> {
   if (interaction.type === InteractionType.PING) {
@@ -107,13 +108,7 @@ export async function handleAutocomplete(
 export function handleMessageComponent(interaction: GuildMessageComponentRequestData): InteractionResponseReply {
   switch (interaction.data.custom_id) {
     default:
-      return {
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: "Something went wrong. Handler not found.",
-          flags: InteractionResponseFlags.EPHEMERAL,
-        },
-      };
+      return ChatMessageResponse("Something went wrong. Handler not found.", InteractionResponseFlags.EPHEMERAL);
   }
 }
 

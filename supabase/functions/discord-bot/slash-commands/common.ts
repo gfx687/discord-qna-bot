@@ -1,6 +1,7 @@
 import {
   CommandOptionType,
   CommandStringOption,
+  GuildCommandAutocompleteRequestData,
   InteractionRequestData,
   InteractionResponseFlags,
   InteractionResponseType,
@@ -21,7 +22,7 @@ export function ChatMessageResponse(
 }
 
 export function getInteractionOptionString(
-  interaction: InteractionRequestData,
+  interaction: InteractionRequestData | GuildCommandAutocompleteRequestData,
   name: string,
 ): CommandStringOption | undefined {
   return interaction.data?.options?.find((option) => option.name === name && option.type == CommandOptionType.STRING) as
