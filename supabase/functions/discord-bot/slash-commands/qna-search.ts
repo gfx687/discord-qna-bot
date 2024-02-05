@@ -20,12 +20,12 @@ export async function handleQnaAutocomplete(
     };
   }
 
-  const data = await searchQuestions(interaction.guild_id, option.value);
+  const questions = await searchQuestions(interaction.guild_id, option.value);
 
   return {
     type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
     data: {
-      choices: data.map((x) => ({ name: x.question, value: x.question })),
+      choices: questions.map((x) => ({ name: x.question, value: x.question })),
     },
   };
 }
@@ -38,14 +38,14 @@ export async function handleQnaCommand(
     return ChatMessageResponse("Invalid question or something went wrong.", InteractionResponseFlags.EPHEMERAL);
   }
 
-  const data = await searchQuestions(interaction.guild_id, option.value);
+  const questions = await searchQuestions(interaction.guild_id, option.value);
 
-  if (data.length == 0) {
+  if (questions.length == 0) {
     return ChatMessageResponse(
       `No answers were found for question "${option.value}".`,
       InteractionResponseFlags.EPHEMERAL,
     );
   }
 
-  return ChatMessageResponse(data[0].answer);
+  return ChatMessageResponse(questions[0].answer);
 }

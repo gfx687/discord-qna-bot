@@ -3,9 +3,11 @@ import { GuildInteractionRequestData, InteractionResponseFlags } from "npm:slash
 import { InteractionResponseReply } from "../data/discord-types.ts";
 import { getAcronyms } from "../data/acronym-repository.ts";
 import { Acronym, acronymToString, acronymTypeToString } from "../data/acronym-types.ts";
+import { searchQuestions } from "../data/question-repository.ts";
 
 /**
  * Handler for /acronym command created specifically for DRG discord
+ * If requested acronym not found search /qna too
  */
 export async function handleAcronymSearch(
   interaction: GuildInteractionRequestData,
@@ -19,17 +21,20 @@ export async function handleAcronymSearch(
   }
 
   const acronyms = await getAcronyms(interaction.guild_id, option.value);
-
-  if (acronyms.length == 0) {
-    return ChatMessageResponse(
-      `No acronyms matching '${option.value.toUpperCase()}' found.\n\nTry \`/qna\` command, maybe someone added an answer manually.`,
-      InteractionResponseFlags.EPHEMERAL,
-    );
+  if (acronyms.length > 0) {
+    const message = buildAcronymMessage(acronyms);
+    return ChatMessageResponse(message);
   }
 
-  const message = buildAcronymMessage(acronyms);
+  const questions = await searchQuestions(interaction.guild_id, option.value);
+  if (questions.length > 0) {
+    return ChatMessageResponse(questions[0].answer);
+  }
 
-  return ChatMessageResponse(message);
+  return ChatMessageResponse(
+    `No acronyms matching '${option.value.toUpperCase()}' found.`,
+    InteractionResponseFlags.EPHEMERAL,
+  );
 }
 
 /**
