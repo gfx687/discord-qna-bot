@@ -353,3 +353,117 @@ VALUES
     ('878318716801155233', 'DS', 'drg-weapon-mod', '{"tier": "4", "class": "Engineer", "modName": "Defender System", "position": "A", "weaponName": "LMG Gun Platform"}'),
     ('878318716801155233', 'HS', 'drg-weapon-mod', '{"tier": "4", "class": "Engineer", "modName": "Hawkeye System", "position": "B", "weaponName": "LMG Gun Platform"}'),
     ('878318716801155233', 'HS', 'drg-weapon-mod', '{"tier": "3", "class": "Engineer", "modName": "Hazmat System", "position": "A", "weaponName": "Engineer''s Armor"}');
+
+-- idempotent operation, name is primary key
+INSERT INTO
+  public.drg_weapons_info (name, class, search_terms, mods)
+VALUES
+  (
+    '"Warthog" Auto 210',
+    'Engineer',
+    null,
+    '[{"name": "Supercharged Feed Mechanism", "tier": 1, "position": "A", "description": "+1 Rate of Fire"}, {"name": "Overstuffed Magazine", "tier": 1, "position": "B", "description": "+2 Magazine Size"}, {"name": "Expanded Ammo Bags", "tier": 2, "position": "A", "description": "+42 Max Ammo"}, {"name": "Loaded Shells", "tier": 2, "position": "B", "description": "+2 Pellets per Shot"}, {"name": "Choke", "tier": 2, "position": "C", "description": "x0.5 Base Spread"}, {"name": "Recoil Dampener", "tier": 3, "position": "A", "description": "x0.4 Recoil"}, {"name": "Quickfire Ejector", "tier": 3, "position": "B", "description": "-0.5sec Reload Time"}, {"name": "High Capacity Magazine", "tier": 3, "position": "C", "description": "+2 Magazine Size"}, {"name": "Tungsten Coated Buckshot", "tier": 4, "position": "A", "description": "+400% Armor Breaking"}, {"name": "Bigger Pellets", "tier": 4, "position": "B", "description": "+1 Damage per Pellet"}, {"name": "Turret Whip", "tier": 5, "position": "A", "description": "Shoot Turret to consume 5 Turret Ammo & shoot AoE Projectile; deals 160 Explosive Area Damage in 2m Radius, 100% Chance to Stun for 1.5sec, 1.0 Fear & 200% Armor Breaking w/ 3sec Cooldown"}, {"name": "Miner Adjustments", "tier": 5, "position": "B", "description": "+0.5 Rate of Fire, Automatic Fire"}]'
+  ),
+  (
+    '"Stubby" Voltaic SMG',
+    'Engineer',
+    null,
+    '[{"name": "Increased Caliber Rounds", "tier": 1, "position": "A", "description": "+3 Direct Damage"}, {"name": "Upgraded Capacitors", "tier": 1, "position": "B", "description": "+25% Electrocute Chance"}, {"name": "Expanded Ammo Bags", "tier": 1, "position": "C", "description": "+120 Max Ammo"}, {"name": "High Capacity Magazine", "tier": 2, "position": "A", "description": "+10 Magazine Size"}, {"name": "Recoil Dampener", "tier": 2, "position": "B", "description": "x0.7 Recoil"}, {"name": "Improved Gas System", "tier": 2, "position": "C", "description": "+3 Rate of Fire"}, {"name": "High Velocity Rounds", "tier": 3, "position": "A", "description": "+3 Direct Damage"}, {"name": "Expanded Ammo Bags", "tier": 3, "position": "B", "description": "+120 Max Ammo"}, {"name": "Hollow-Point Bullets", "tier": 4, "position": "A", "description": "+25% Weakpoint Bonus"}, {"name": "Conductive Bullets", "tier": 4, "position": "B", "description": "+25% Direct Damage to Electrocuted/IFG''d Enemies"}, {"name": "Hardened Rounds", "tier": 4, "position": "C", "description": "+250% Armor Breaking"}, {"name": "Magazine Capacity Tweak", "tier": 5, "position": "A", "description": "+20 Magazine Size"}, {"name": "Electric Arc", "tier": 5, "position": "B", "description": "+25% Chance on Electrocute to Spread Electrocute within 2.75m Radius"}, {"name": "Improved Accuracy", "tier": 5, "position": "C", "description": "x0.6 Base Spread"}]'
+  ),
+  (
+    'LOK-1 Smart Rifle',
+    'Engineer',
+    array['loki', 'lok1'],
+    '[{"name": "Increased Caliber Rounds", "tier": 1, "position": "A", "description": "+6 Direct Damage"}, {"name": "Expanded Ammo Bags", "tier": 1, "position": "B", "description": "+72 Max Ammo"}, {"name": "Macro Lens", "tier": 2, "position": "A", "description": "x0.2 Lock Threshold, x2 Lock-on Range"}, {"name": "CCD Array Add-On", "tier": 2, "position": "B", "description": "+1.3° Lock Threshold, x1.5 Lock Lose Threshold"}, {"name": "Zoom Lens", "tier": 2, "position": "C", "description": "+10m Lock-on Range"}, {"name": "Electro-Chemical Rounds", "tier": 3, "position": "A", "description": "+20% Damage to Electrified & Burning Targets (Stacks)"}, {"name": "SMRT Targeting Software", "tier": 3, "position": "B", "description": "Lock-on Prioritizes Low Health Enemies, Prevents Extraneous Locks based on Target Health"}, {"name": "Super Blowthrough Rounds", "tier": 3, "position": "C", "description": "+3 Penetrations"}, {"name": "Shutter Speed Sensor", "tier": 4, "position": "A", "description": "x0.85 Lock-on Time"}, {"name": "Aperture Extension", "tier": 4, "position": "B", "description": "+6 Max Lock-ons"}, {"name": "Electric Generator Mod", "tier": 5, "position": "A", "description": "First Bullet in Lock Electrocutes Targets with 3 Locks"}, {"name": "Unstable Lock Mechanism", "tier": 5, "position": "B", "description": "Full Lock adds 20% Direct Damage"}, {"name": "Fear Frequency", "tier": 5, "position": "C", "description": "Last Bullet in Burst emits Fear near Player; +0.15 Fear per Bullet; 2.4m Radius + 0.15m per Bullet"}]'
+  ),
+  (
+    'Deepcore 40mm PGL',
+    'Engineer',
+    null,
+    '[{"name": "Fragmentary Shell", "tier": 1, "position": "A", "description": "+1m AoE Radius"}, {"name": "Extra Ammo", "tier": 1, "position": "B", "description": "+2 Max Ammo"}, {"name": "HE Compound", "tier": 1, "position": "C", "description": "+20 Area Damage"}, {"name": "Expanded Ammo Bags", "tier": 2, "position": "A", "description": "+2 Max Ammo"}, {"name": "Larger Payload", "tier": 2, "position": "B", "description": "+20 Area Damage"}, {"name": "Incendiary Compound", "tier": 3, "position": "A", "description": "50% of Direct, Area & Armor Damage converted to Heat"}, {"name": "Pressure Wave", "tier": 3, "position": "B", "description": "+500% Armor Breaking"}, {"name": "High Velocity Grenades", "tier": 3, "position": "C", "description": "+180% Projectile Velocity"}, {"name": "Homebrew Explosive", "tier": 4, "position": "A", "description": "Damage Randomized between x0.8 - x1.4"}, {"name": "Nails + Tape", "tier": 4, "position": "B", "description": "+1m AoE Radius"}, {"name": "Concussive Blast", "tier": 4, "position": "C", "description": "+100% Chance to Stun for 3sec"}, {"name": "Proximity Trigger", "tier": 5, "position": "A", "description": "After 0.2 Arming Time, Grenades Automatically Detonate within 2m of Enemies; No Longer Detonate on Terrain Impact; Automatically Detonate after 3.3sec; x1.1 AoE Radius"}, {"name": "Spiky Grenade", "tier": 5, "position": "B", "description": "+60 Direct Damage"}, {"name": "Disabled Inertia Inhibitor", "tier": 5, "position": "C", "description": "Player''s Velocity is Added to Grenade Velocity"}]'
+  ),
+  (
+    'Reinforced Power Drills',
+    'Driller',
+    null,
+    '[{"name": "Barbed Drills", "tier": 1, "position": "A", "description": "+5 Damage"}, {"name": "Hardened Drill Tips", "tier": 1, "position": "B", "description": "+50% Mining Speed, +10% Movement Speed while Drilling"}, {"name": "Expanded Fuel Tanks", "tier": 1, "position": "C", "description": "+6 Max Fuel"}, {"name": "Magnetic Refrigeration", "tier": 2, "position": "A", "description": "+1 Cooling Rate"}, {"name": "Streamlined Integrity Check", "tier": 2, "position": "B", "description": "-3sec Overheat Duration"}, {"name": "Supercharged Motor", "tier": 3, "position": "A", "description": "+50% Mining Speed, +10% Movement Speed while Drilling"}, {"name": "Increased Tank Pressure", "tier": 4, "position": "A", "description": "+6 Max Fuel"}, {"name": "Bloody Cold Drills", "tier": 4, "position": "B", "description": "+1 Heat removal on Damage"}]'
+  ),
+  (
+    'Breach Cutter',
+    'Engineer',
+    array['bc'],
+    '[{"name": "Prolonged Power Generation", "tier": 1, "position": "A", "description": "+1.5sec Projectile Lifetime"}, {"name": "High Capacity Magazine", "tier": 1, "position": "B", "description": "+3 Magazine Size"}, {"name": "Expanded Ammo Bags", "tier": 2, "position": "A", "description": "+6 Max Ammo"}, {"name": "Condensed Plasma", "tier": 2, "position": "B", "description": "+175 Beam DPS"}, {"name": "Loosened Node Cohesion", "tier": 2, "position": "C", "description": "+3m Beam Width"}, {"name": "Quick Deploy", "tier": 3, "position": "A", "description": "-0.2sec Plasma Expansion Delay"}, {"name": "Improved Case Ejector", "tier": 3, "position": "B", "description": "-0.6sec Reload Time"}, {"name": "Armor Breaking", "tier": 4, "position": "A", "description": "+200% Armor Breaking"}, {"name": "Disruptive Frequency Tuning", "tier": 4, "position": "B", "description": "+100% Chance to Stun for 3sec"}, {"name": "Explosive Goodbye", "tier": 5, "position": "A", "description": "Manually Detonate Line, dealing 40 Explosive Area Damage in 3.5m Radius; leaves behind 3.25m Radius Plasma Sphere; deals ~35.56 Fire DPS & Slows by 20%, lasts 4.6sec"}, {"name": "Plasma Trail", "tier": 5, "position": "B", "description": "Line leaves behind Plasma field 2/3 width of Beam width; deals ~20 Fire DPS, lasts 4.6sec"}, {"name": "Triple Split Line", "tier": 5, "position": "C", "description": "Adds Line Above and Below Primary Line (does not increase DPS)"}]'
+  ),
+  (
+    'Shard Diffractor',
+    'Engineer',
+    array['sd'],
+    '[{"name": "Impact Splash", "tier": 1, "position": "A", "description": "+2 Area Damage"}, {"name": "Increased Energy Density", "tier": 1, "position": "B", "description": "+2 Direct Damage"}, {"name": "Larger Battery", "tier": 1, "position": "C", "description": "+100 Total Capacity"}, {"name": "Soft Tissue Disruption", "tier": 2, "position": "A", "description": "+33% Weakpoint Bonus"}, {"name": "Particle Spattering", "tier": 2, "position": "B", "description": "+0.8m AoE Radius"}, {"name": "Aluminum Foil DIY", "tier": 3, "position": "A", "description": "+50 Charge Capacity"}, {"name": "Open Structure Battery", "tier": 3, "position": "B", "description": "-0.8 Recharge Time"}, {"name": "High-Intensity Heating", "tier": 4, "position": "A", "description": "+75% Direct Damage added as Heat"}, {"name": "Nitrogen Vaporizer", "tier": 4, "position": "B", "description": "+400% Armor Breaking"}, {"name": "Hydrogen Rupturing", "tier": 5, "position": "A", "description": "+33% Area & Direct Damage against Electrocuted/IFG''d Enemies"}, {"name": "Bio-Mass Converter", "tier": 5, "position": "B", "description": "Refunds 3 Ammo to Magazine on Killing Medium-Sized or Larger Enemies; 0.25sec Cooldown"}, {"name": "Dazzler Module", "tier": 5, "position": "C", "description": "AoE Damage inflicts 80% Slow for 1sec"}]'
+  ),
+  (
+    'Platform Gun',
+    'Engineer',
+    null,
+    '[{"name": "Supercharged Feed Mechanism", "tier": 1, "position": "A", "description": "+1 Rate of Fire"}, {"name": "Expanded Ammo Bags", "tier": 1, "position": "B", "description": "+8 Max Ammo"}, {"name": "High Capacity Magazine", "tier": 1, "position": "C", "description": "+4 Magazine Size"}, {"name": "Plastcrete MKII", "tier": 2, "position": "A", "description": "Platforms Reduce Fall Damage"}, {"name": "Expanded Ammo Bags", "tier": 3, "position": "A", "description": "+8 Max Ammo"}, {"name": "Repellant Additive", "tier": 3, "position": "B", "description": "Enemies Attempt to Avoid Walking on Platforms"}, {"name": "Disabled Inertia Inhibitor", "tier": 3, "position": "C", "description": "Player''s Velocity is Added to Platform Velocity"}]'
+  ),
+  (
+    'LMG Gun Platform',
+    'Engineer',
+    array['turret', 'turrets'],
+    '[{"name": "Gemini System", "tier": 1, "position": "A", "description": "+1 Turret, +90 Max Ammo"}, {"name": "LMG MKII", "tier": 1, "position": "B", "description": "+2 Damage, +15 Magazine Capacity, +5m Range"}, {"name": "Expanded Ammo Bags", "tier": 2, "position": "A", "description": "+90 Max Ammo"}, {"name": "Quick Deploy", "tier": 2, "position": "B", "description": "-2sec Build Time"}, {"name": "Widemouth Refill Port", "tier": 2, "position": "C", "description": "-1sec Reload Time"}, {"name": "Penetrating Rounds", "tier": 3, "position": "A", "description": "+300% Armor Breaking"}, {"name": "Stun", "tier": 3, "position": "B", "description": "+20% Chance to Stun for 1.5sec"}, {"name": "Expanded Ammo Capacity", "tier": 3, "position": "C", "description": "+30 Magazine Capacity"}, {"name": "Defender System", "tier": 4, "position": "A", "description": "+5 Damage, Limited Scan Angle"}, {"name": "Hawkeye System", "tier": 4, "position": "B", "description": "+15m Range; Manually Aim Turret by Pinging Enemies with Laser Pointer"}]'
+  ),
+  (
+    'Engineer''s Armor',
+    'Engineer',
+    null,
+    '[{"name": "Hazmat System", "tier": 3, "position": "A", "description": "+50% Poison Resistance"}]'
+  ),
+  (
+    'CRSPR Flamethrower',
+    'Driller',
+    null,
+    '[{"name": "High Capacity Tanks", "tier": 1, "position": "A", "description": "+25 Tank Size"}, {"name": "High Pressure Ejector", "tier": 1, "position": "B", "description": "+5m Range"}, {"name": "Unfiltered Fuel", "tier": 2, "position": "A", "description": "+4 Damage per Particle"}, {"name": "Triple Filtered Fuel", "tier": 2, "position": "B", "description": "+10 Heat per Particle"}, {"name": "Sticky Flame Duration", "tier": 2, "position": "C", "description": "+3sec Sticky Duration"}, {"name": "Oversized Valves", "tier": 3, "position": "A", "description": "+1.8 Flow Rate"}, {"name": "Sticky Flame Slowdown", "tier": 3, "position": "B", "description": "+45% Sticky Slow"}, {"name": "More Fuel", "tier": 3, "position": "C", "description": "+75 Max Fuel"}, {"name": "It Burns!", "tier": 4, "position": "A", "description": "+0.2 Fear per Particle"}, {"name": "Sticky Flame Duration", "tier": 4, "position": "B", "description": "+3sec Sticky Duration"}, {"name": "More Fuel", "tier": 4, "position": "C", "description": "+75 Max Fuel"}, {"name": "Heat Radiance", "tier": 5, "position": "A", "description": "80 Fire Damage & 80 Heat per sec within 4m while firing"}, {"name": "Targets Explode", "tier": 5, "position": "B", "description": "50% Chance on Direct Kill to Explode for 55 Fire Damage & 55 Heat within 3m"}]'
+  ),
+  (
+    'Cryo Cannon',
+    'Driller',
+    null,
+    '[{"name": "Larger Pressure Chamber", "tier": 1, "position": "A", "description": "x0.33 Pressure Drop Rate"}, {"name": "Faster Turbine Spinup", "tier": 1, "position": "B", "description": "-0.4sec Chargeup Time"}, {"name": "Stronger Cooling Unit", "tier": 1, "position": "C", "description": "+1 Cold per Particle"}, {"name": "Larger Reserve Tank", "tier": 2, "position": "A", "description": "+75 Tank Size"}, {"name": "Overclocked Ejection Turbine", "tier": 2, "position": "B", "description": "+5m Range"}, {"name": "Bypassed Integrity Check", "tier": 2, "position": "C", "description": "-1sec Repressurization Delay"}, {"name": "Improved Pump", "tier": 3, "position": "A", "description": "x1.75 Pressure Gain Rate"}, {"name": "Increased Flow Volume", "tier": 3, "position": "B", "description": "+1.6 Flow Rate"}, {"name": "Hard Mixture", "tier": 4, "position": "A", "description": "+3 Damage per Particle"}, {"name": "Supercooling Mixture", "tier": 4, "position": "B", "description": "+1 Cold per Particle"}, {"name": "Larger Reserve Tank", "tier": 4, "position": "C", "description": "+150 Tank Size"}, {"name": "Fragile", "tier": 5, "position": "A", "description": "Damaging Enemies below 100 HP has HP-based % chance to instantly kill"}, {"name": "Cold Radiance", "tier": 5, "position": "B", "description": "60 Cold per sec within 4m while firing"}]'
+  ),
+  (
+    'Corrosive Sludge Pump',
+    'Driller',
+    null,
+    '[{"name": "High Capacity Tanks", "tier": 1, "position": "A", "description": "x2 Magazine Size"}, {"name": "Better Air Pressurizer", "tier": 1, "position": "B", "description": "+40% Projectile Velocity"}, {"name": "Air Sensitive Compound", "tier": 1, "position": "C", "description": "x1.25 Puddle Width, x1.1 Puddle Height"}, {"name": "Dyse Nozzle", "tier": 2, "position": "A", "description": "+24 Charged Shot Area Damage"}, {"name": "Atomizer Nozzle", "tier": 2, "position": "B", "description": "+4 Charged Shot Fragments"}, {"name": "Potent Goo Mix", "tier": 2, "position": "C", "description": "+8 Regular Shot Area Damage"}, {"name": "Supersaturation", "tier": 3, "position": "A", "description": "x1.5 DoT Duration, x1.5 Puddle Duration"}, {"name": "More Goo Canisters", "tier": 3, "position": "B", "description": "+40 Max Ammo"}, {"name": "Spillback Extension", "tier": 4, "position": "A", "description": "-1 Ammo per Charged Shot"}, {"name": "Improved Spooling Mechanism", "tier": 4, "position": "B", "description": "x0.4 Charge Time"}, {"name": "Protein Disruption Mix", "tier": 5, "position": "A", "description": "+16.25% DoT Slow, +27.5% Puddle Slow"}, {"name": "Fluoroantimonic Acid", "tier": 5, "position": "B", "description": "+8.8 DoT DPS, +4 Puddle DPS"}]'
+  ),
+  (
+    'Subata 120',
+    'Driller',
+    null,
+    '[{"name": "Improved Alignment", "tier": 1, "position": "A", "description": "x0 Base Spread"}, {"name": "High Capacity Magazine", "tier": 1, "position": "B", "description": "+4 Magazine Size"}, {"name": "Expanded Ammo Bags", "tier": 2, "position": "A", "description": "+48 Max Ammo"}, {"name": "Improved Propellant", "tier": 2, "position": "B", "description": "+3 Direct Damage"}, {"name": "Recoil Compensator", "tier": 3, "position": "A", "description": "-33% Spread per Shot, x0.5 Recoil"}, {"name": "2-Round Burst", "tier": 3, "position": "B", "description": "Fires in 2-Round Bursts at 20 RoF; 2nd Bullet has 350% Armor Breaking; -0.25 Mass, -4 RoF"}, {"name": "Quickfire Ejector", "tier": 3, "position": "C", "description": "-0.6 Reload Time"}, {"name": "Hollow-Point Bullets", "tier": 4, "position": "A", "description": "+75% Weakpoint Bonus"}, {"name": "High Velocity Rounds", "tier": 4, "position": "B", "description": "+3 Direct Damage"}, {"name": "Expanded Ammo Bags", "tier": 4, "position": "C", "description": "+48 Max Ammo"}, {"name": "Volatile Bullets", "tier": 5, "position": "A", "description": "+50% Direct Damage as Fire Damage & Heat against Burning Enemies"}, {"name": "Blowthrough Rounds", "tier": 5, "position": "B", "description": "+1 Blowthrough"}, {"name": "Neuro-Corrosive Toxic Catalyst", "tier": 5, "position": "C", "description": "Additional DPS on Enemies with Corrosive, Sludge Puddle, Neurotoxin Status Effects; Killed Enemies Explode"}]'
+  ),
+  (
+    'Experimental Plasma Charger',
+    'Driller',
+    array['epc'],
+    '[{"name": "Increased Particle Density", "tier": 1, "position": "A", "description": "+5 Regular Shot Direct Damage"}, {"name": "Larger Battery", "tier": 1, "position": "B", "description": "+24 Battery Size"}, {"name": "Higher Charged Plasma Energy", "tier": 1, "position": "C", "description": "+15 Charged Shot Direct & Area Damage"}, {"name": "Heat Shield", "tier": 2, "position": "A", "description": "x0.4 Heat per Second When Charged"}, {"name": "Overcharged Plasma Accelerator", "tier": 2, "position": "B", "description": "+25% Regular Shot Velocity"}, {"name": "Improved Charge Efficiency", "tier": 3, "position": "A", "description": "-2 Ammo per Charged Shot"}, {"name": "Crystal Capacitors", "tier": 3, "position": "B", "description": "x2.5 Charge Speed"}, {"name": "Tweaked Radiator", "tier": 3, "position": "C", "description": "+50% Cooling Rate"}, {"name": "Expanded Plasma Splash", "tier": 4, "position": "A", "description": "+1m Charged Shot AoE Radius"}, {"name": "High Density Battery", "tier": 4, "position": "B", "description": "+24 Battery Size"}, {"name": "Reactive Shockwave", "tier": 4, "position": "C", "description": "+15 Charged Shot Direct & Area Damage"}, {"name": "Burning Nightmare", "tier": 5, "position": "A", "description": "Charged Shots penetrate enemies, no longer explode; x0.3 AoE Radius; Regular Shots deal 5+25% Direct Damage as Heat; 70% of Charged Shot Damage converted to Fire & Heat"}, {"name": "Thin Containment Field", "tier": 5, "position": "B", "description": "Shooting Charged Shot with Regular Shot causes Explosion dealing 240 Damage & 3m Terrain Carve; x0.8 Heat per Regular & Charged Shot"}, {"name": "Plasma Splash", "tier": 5, "position": "C", "description": "Regular Shots deal 10 Fire Damage (no Heat) in 1.5m Radius; -10 Direct Damage"}]'
+  ),
+  (
+    'Colette Wave Cooker',
+    'Driller',
+    array['cwc'],
+    '[{"name": "Convex Lens", "tier": 1, "position": "A", "description": "+2 Damage"}, {"name": "Magnetron Tube", "tier": 1, "position": "B", "description": "+100 Magazine Size"}, {"name": "Concave Lens", "tier": 1, "position": "C", "description": "x3 Shot Width"}, {"name": "Heat Sink", "tier": 2, "position": "A", "description": "-20% Heat Generation"}, {"name": "Larger Power Supply", "tier": 2, "position": "B", "description": "+2 Rate of Fire"}, {"name": "Thermoelectric Cooler", "tier": 2, "position": "C", "description": "+50% Cooling Rate, -0.5sec Overheat Duration"}, {"name": "Densification Ray", "tier": 3, "position": "A", "description": "+50% Slow on Hit for 1sec"}, {"name": "Temperature Amplifier", "tier": 3, "position": "B", "description": "*"}, {"name": "Wide Lens Add-on", "tier": 4, "position": "A", "description": "*"}, {"name": "Power Supply Overdrive", "tier": 4, "position": "B", "description": "*"}, {"name": "Contagion Transmitter", "tier": 5, "position": "A", "description": "*"}, {"name": "Boiler Ray", "tier": 5, "position": "B", "description": "+50% Chance to Explode Killed Enemies, 100 Explosive Area Damage in 2.5m Radius"}, {"name": "Exothermic Reactor", "tier": 5, "position": "C", "description": "*"}]'
+  ),
+  (
+    'Satchel Charge',
+    'Driller',
+    array['c4'],
+    '[{"name": "Fragmentary Shell", "tier": 1, "position": "A", "description": "+3m Damage Radius"}, {"name": "Extra Satchel Charge", "tier": 1, "position": "B", "description": "+1 Max Ammo"}, {"name": "Bigger Charge", "tier": 1, "position": "C", "description": "+250 Damage"}, {"name": "Kill Switch", "tier": 2, "position": "A", "description": "Disarm Unused Charges"}, {"name": "Extra Satchel Charge", "tier": 3, "position": "A", "description": "+1 Max Ammo"}, {"name": "Volatile Compound", "tier": 3, "position": "B", "description": "+250 Damage, Explodes upon taking Damage"}, {"name": "Big Bang", "tier": 4, "position": "A", "description": "+900% Fear Factor, +10m Fear Radius"}, {"name": "Concussive Blast", "tier": 4, "position": "B", "description": "+3.5sec Stun Duration, +10m Stun Radius"}, {"name": "Rock Mover", "tier": 4, "position": "C", "description": "+9m Carve Diameter"}]'
+  ),
+  (
+    'Driller''s Armor',
+    'Driller',
+    null,
+    '[{"name": "Temperature Insulation", "tier": 3, "position": "A", "description": "+50 Fire Resistance"}]'
+  )
+ON CONFLICT DO NOTHING;

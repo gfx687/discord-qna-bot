@@ -18,3 +18,9 @@
 6) /acronyms
 - existing acronym with multiple definitions
 - non-existing acronym
+
+7) /weapon
+- check autocomplete
+- check that function returns expected data
+- check non-existing entry search
+- check specifying / omitting tier param
