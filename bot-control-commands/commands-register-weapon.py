@@ -4,7 +4,7 @@ import json
 
 import requests
 
-with open('bot-control-commands/secrets-test.json', 'r', encoding='utf-8') as file:
+with open('bot-control-commands/secrets.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
 url = f"https://discord.com/api/v10/applications/{

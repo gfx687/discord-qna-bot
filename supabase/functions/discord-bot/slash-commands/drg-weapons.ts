@@ -10,9 +10,6 @@ import { ChatMessageResponse, getInteractionOptionString, groupBy } from "./comm
 import { getWeaponInfo, searchWeaponInfo } from "../data/drg/weapon-info-repository.ts";
 import { DRGWeaponModTier } from "../data/drg/common-types.ts";
 
-// TODO: register slash command for DRG discord
-// TODO: update user-guide.md
-
 export async function handleWeaponAutocomplete(
   interaction: GuildCommandAutocompleteRequestData,
 ): Promise<InteractionResponseAutocomplete> {

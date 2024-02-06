@@ -21,6 +21,7 @@
 
 7) /weapon
 - check autocomplete
+- check that search terms work
 - check that function returns expected data
 - check non-existing entry search
 - check specifying / omitting tier param
