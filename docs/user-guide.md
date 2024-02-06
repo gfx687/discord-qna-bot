@@ -11,6 +11,7 @@
 - [Server-Specific Bot Commands](#server-specific-bot-commands)
   - [Deep Rock Galactic](#deep-rock-galactic)
     - [`/acronym` - Search For All Definitions of the Given Acronym](#acronym---search-for-all-definitions-of-the-given-acronym)
+    - [`/weapon` - Search Weapon or Tool Mod Tree Info](#weapon---search-weapon-or-tool-mod-tree-info)
 
 ## How to Add the Bot to Your Server
 
@@ -91,3 +92,11 @@ Using `/qna-help` will return a link to this page.
 ![acronym search](assets/acronyms-search.png)
 
 ![acronym response](assets/acronyms-response.png)
+
+#### `/weapon` - Search Weapon or Tool Mod Tree Info
+
+![drg weapon search 1](assets/drg-weapon-search-1.png)
+
+![drg weapon search 2](assets/drg-weapon-search-2.png)
+
+![drg weapon response](assets/drg-weapon-search-3.png)

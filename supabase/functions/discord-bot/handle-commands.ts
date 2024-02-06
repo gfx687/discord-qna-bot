@@ -31,6 +31,7 @@ import { saveInvocationLog } from "./data/invocation-log-repository.ts";
 import { invocationLogInsertZod } from "./data/invocation-log-types.ts";
 import { getInteractionOptionString } from "./slash-commands/common.ts";
 import { ChatMessageResponse } from "./slash-commands/common.ts";
+import { handleDRGWeaponSearch, handleWeaponAutocomplete } from "./slash-commands/drg-weapons.ts";
 
 export async function handleInteraction(interaction: AnyRequestData): Promise<InteractionResponse | undefined> {
   if (interaction.type === InteractionType.PING) {
@@ -84,6 +85,8 @@ export async function handleCommands(
       return handleQnaHelp();
     case "acronym":
       return await handleAcronymSearch(interaction);
+    case "weapon":
+      return await handleDRGWeaponSearch(interaction);
     default:
       return handleCommandNotFound();
   }
@@ -97,6 +100,8 @@ export async function handleAutocomplete(
     case "qna-edit":
     case "qna-delete":
       return await handleQnaAutocomplete(interaction);
+    case "weapon":
+        return await handleWeaponAutocomplete(interaction)
     default:
       return {
         type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,

@@ -4,6 +4,7 @@ import { InteractionResponseReply } from "../data/discord-types.ts";
 import { getAcronyms } from "../data/acronym-repository.ts";
 import { Acronym, acronymToString, acronymTypeToString } from "../data/acronym-types.ts";
 import { searchQuestions } from "../data/question-repository.ts";
+import { groupBy } from "./common.ts";
 
 /**
  * Handler for /acronym command created specifically for DRG discord
@@ -13,7 +14,7 @@ export async function handleAcronymSearch(
   interaction: GuildInteractionRequestData,
 ): Promise<InteractionResponseReply> {
   const option = getInteractionOptionString(interaction, "acronym");
-  if (option == null || option.value == null || option.value.trim() == "") {
+  if (option?.value == null || option.value.trim() == "") {
     return ChatMessageResponse(
       "Invalid input or something went wrong.",
       InteractionResponseFlags.EPHEMERAL,
@@ -38,7 +39,7 @@ export async function handleAcronymSearch(
 }
 
 /**
- * Takes a lost of Acronyms and builds a message from them.
+ * Takes a list of Acronyms and builds a message from them.
  *
  * Example:
  *
@@ -56,12 +57,7 @@ function buildAcronymMessage(acronyms: Acronym[]): string {
     return "No matches found.";
   }
 
-  const grouped = acronyms.reduce<{ [k: string]: Acronym[] }>((acc, next) => {
-    const key = acronymTypeToString(next.acronymType);
-    acc[key] = acc[key] || [];
-    acc[key].push(next);
-    return acc;
-  }, {});
+  const grouped = groupBy(acronyms, ({acronymType}) => acronymTypeToString(acronymType));
 
   let message = `Found definitions for '${acronyms[0].acronym}':\n`;
   for (const key in grouped) {
