@@ -2,7 +2,7 @@ import sql from "../db.ts";
 import { DRGWeaponInfo, drgWeaponInfoZod } from "./weapon-info-types.ts";
 
 export async function getWeaponInfo(weaponName: string): Promise<DRGWeaponInfo | undefined> {
-  const weaponInfo = await sql`
+  const weaponInfo = await sql<DRGWeaponInfo[]>`
         select *
         from drg_weapons_info
         where name = ${weaponName};`;
@@ -12,7 +12,7 @@ export async function getWeaponInfo(weaponName: string): Promise<DRGWeaponInfo |
 
 export async function searchWeaponInfo(term: string): Promise<DRGWeaponInfo[]> {
   term = term.trim();
-  const weapons = await sql`
+  const weapons = await sql<DRGWeaponInfo[]>`
         select *
         from drg_weapons_info
         where replace(name, '"', '') ilike ${term + "%"}

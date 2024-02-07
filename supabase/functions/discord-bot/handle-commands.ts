@@ -140,6 +140,9 @@ export async function LogInvocation(interaction: GuildInteractionRequestData) {
   if (!option) {
     option = getInteractionOptionString(interaction, "acronym");
   }
+  if (!option) {
+    option = getInteractionOptionString(interaction, "weapon-name");
+  }
 
   try {
     const log = invocationLogInsertZod.parse({

@@ -13,7 +13,7 @@ export async function searchQuestions(guildId: string, term: string): Promise<Qu
 }
 
 export async function getQuestion(guildId: string, question: string): Promise<Question | undefined> {
-  const results = await sql<Question>`
+  const results = await sql<Question[]>`
         select
             guild_id as "guildId",
             question,
@@ -24,27 +24,27 @@ export async function getQuestion(guildId: string, question: string): Promise<Qu
   return results.count == 0 ? undefined : questionZod.parse(results[0]);
 }
 
-export function deleteQuestion(guildId: string, question: string): Promise<void> {
-  return sql`
+export async function deleteQuestion(guildId: string, question: string) {
+  await sql`
         delete from qna
         where guild_id = ${guildId} and question = ${question}`;
 }
 
-export function updateQuestionAnswer(guildId: string, question: string, newAnswer: string): Promise<void> {
-  return sql`
+export async function updateQuestionAnswer(guildId: string, question: string, newAnswer: string) {
+  await sql`
         update qna
         set answer = ${newAnswer}
         where guild_id = ${guildId} and question = ${question}`;
 }
 
-export function createQuestion(question: Question) {
-  return sql`
+export async function createQuestion(question: Question) {
+  await sql`
         insert into qna (guild_id, question, answer)
         values (${question.guildId}, ${question.question}, ${question.answer})`;
 }
 
 export async function getEditProcess(processId: string): Promise<QuestionEditProcess | undefined> {
-  const results = await sql<QuestionEditProcess>`
+  const results = await sql<QuestionEditProcess[]>`
         select
             process_id as "processId",
             guild_id as "guildId",
@@ -56,8 +56,8 @@ export async function getEditProcess(processId: string): Promise<QuestionEditPro
   return results.count == 0 ? undefined : questionEditProcessZod.parse(results[0]);
 }
 
-export function createEditProcess(process: QuestionEditProcess): Promise<void> {
-  return sql`
+export async function createEditProcess(process: QuestionEditProcess) {
+  await sql`
         insert into qna_edit_processes (process_id, guild_id, question, started_at)
         values (${process.processId}, ${process.guildId}, ${process.question}, ${process.startedAt})`;
 }
