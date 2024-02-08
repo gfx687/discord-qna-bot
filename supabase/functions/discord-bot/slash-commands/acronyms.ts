@@ -13,7 +13,7 @@ import { groupBy } from "./common.ts";
 export async function handleAcronymSearch(
   interaction: GuildInteractionRequestData,
 ): Promise<InteractionResponseReply> {
-  const option = getInteractionOptionString(interaction, "acronym");
+  const option = _internal.getInteractionOptionString(interaction, "acronym");
   if (option?.value == null || option.value.trim() == "") {
     return ChatMessageResponse(
       "Invalid input or something went wrong.",
@@ -21,13 +21,13 @@ export async function handleAcronymSearch(
     );
   }
 
-  const acronyms = await getAcronyms(interaction.guild_id, option.value);
+  const acronyms = await _internal.getAcronyms(interaction.guild_id, option.value);
   if (acronyms.length > 0) {
     const message = buildAcronymMessage(acronyms);
     return ChatMessageResponse(message);
   }
 
-  const questions = await searchQuestions(interaction.guild_id, option.value);
+  const questions = await _internal.searchQuestions(interaction.guild_id, option.value);
   if (questions.length > 0) {
     return ChatMessageResponse(questions[0].answer);
   }
@@ -57,7 +57,7 @@ function buildAcronymMessage(acronyms: Acronym[]): string {
     return "No matches found.";
   }
 
-  const grouped = groupBy(acronyms, ({acronymType}) => acronymTypeToString(acronymType));
+  const grouped = groupBy(acronyms, ({ acronymType }) => acronymTypeToString(acronymType));
 
   let message = `Found definitions for '${acronyms[0].acronym}':\n`;
   for (const key in grouped) {
@@ -69,3 +69,9 @@ function buildAcronymMessage(acronyms: Acronym[]): string {
 
   return message;
 }
+
+export const _internal = {
+  getInteractionOptionString,
+  getAcronyms,
+  searchQuestions,
+};

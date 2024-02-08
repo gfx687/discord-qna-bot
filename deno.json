@@ -1,5 +1,8 @@
 {
     "fmt": {
         "lineWidth": 120
+    },
+    "tasks": {
+        "test": "DB_CONNECTION_STRING=postgres:// DISCORD_PUBLIC_KEY=test deno test --allow-env"
     }
 }
