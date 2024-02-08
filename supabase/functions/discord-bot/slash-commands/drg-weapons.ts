@@ -7,7 +7,7 @@ import {
 import { InteractionResponseAutocomplete, InteractionResponseReply } from "../data/discord-types.ts";
 import { DRGWeaponInfo } from "../data/drg/weapon-info-types.ts";
 import { ChatMessageResponse, getInteractionOptionString, groupBy } from "./common.ts";
-import { getWeaponInfo, searchWeaponInfo } from "../data/drg/weapon-info-repository.ts";
+import { searchWeaponInfo } from "../data/drg/weapon-info-repository.ts";
 import { DRGWeaponModTier } from "../data/drg/common-types.ts";
 
 export async function handleWeaponAutocomplete(
@@ -50,15 +50,15 @@ export async function handleDRGWeaponSearch(
   const tierOption = getInteractionOptionString(interaction, "tier");
   const tier = parseTier(tierOption?.value);
 
-  const weaponInfo = await getWeaponInfo(weaponName.value);
-  if (!weaponInfo) {
+  const weapons = await searchWeaponInfo(weaponName.value);
+  if (weapons.length == 0) {
     return ChatMessageResponse(
       `No weapon / tool matching '${weaponName.value}' found.`,
       InteractionResponseFlags.EPHEMERAL,
     );
   }
 
-  const message = buildWeaponInfoMessage(weaponInfo, tier);
+  const message = buildWeaponInfoMessage(weapons[0], tier);
   return ChatMessageResponse(message);
 }
 
