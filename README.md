@@ -2,6 +2,7 @@
 
 ![qna search](docs/assets/qna-search.png)
 
+> :information_source: This is a **Developer** README  
 > If you are looking for a **User Guide** or **visual examples** of the commands this bot provides, please check [User Guide](docs/user-guide.md).
 
 Discord Bot with Questions and Answers (Q&A) functionality created using exclusively Discord's [Interaction API](https://discord.com/developers/docs/interactions/application-commands)

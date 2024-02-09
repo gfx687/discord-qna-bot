@@ -409,7 +409,7 @@ VALUES
   (
     'LMG Gun Platform',
     'Engineer',
-    array['turret', 'turrets'],
+    array['turret', 'turrets', 'sentry'],
     '[{"name": "Gemini System", "tier": 1, "position": "A", "description": "+1 Turret, +90 Max Ammo"}, {"name": "LMG MKII", "tier": 1, "position": "B", "description": "+2 Damage, +15 Magazine Capacity, +5m Range"}, {"name": "Expanded Ammo Bags", "tier": 2, "position": "A", "description": "+90 Max Ammo"}, {"name": "Quick Deploy", "tier": 2, "position": "B", "description": "-2sec Build Time"}, {"name": "Widemouth Refill Port", "tier": 2, "position": "C", "description": "-1sec Reload Time"}, {"name": "Penetrating Rounds", "tier": 3, "position": "A", "description": "+300% Armor Breaking"}, {"name": "Stun", "tier": 3, "position": "B", "description": "+20% Chance to Stun for 1.5sec"}, {"name": "Expanded Ammo Capacity", "tier": 3, "position": "C", "description": "+30 Magazine Capacity"}, {"name": "Defender System", "tier": 4, "position": "A", "description": "+5 Damage, Limited Scan Angle"}, {"name": "Hawkeye System", "tier": 4, "position": "B", "description": "+15m Range; Manually Aim Turret by Pinging Enemies with Laser Pointer"}]'
   ),
   (
@@ -421,13 +421,13 @@ VALUES
   (
     'CRSPR Flamethrower',
     'Driller',
-    null,
+    array['flamer'],
     '[{"name": "High Capacity Tanks", "tier": 1, "position": "A", "description": "+25 Tank Size"}, {"name": "High Pressure Ejector", "tier": 1, "position": "B", "description": "+5m Range"}, {"name": "Unfiltered Fuel", "tier": 2, "position": "A", "description": "+4 Damage per Particle"}, {"name": "Triple Filtered Fuel", "tier": 2, "position": "B", "description": "+10 Heat per Particle"}, {"name": "Sticky Flame Duration", "tier": 2, "position": "C", "description": "+3sec Sticky Duration"}, {"name": "Oversized Valves", "tier": 3, "position": "A", "description": "+1.8 Flow Rate"}, {"name": "Sticky Flame Slowdown", "tier": 3, "position": "B", "description": "+45% Sticky Slow"}, {"name": "More Fuel", "tier": 3, "position": "C", "description": "+75 Max Fuel"}, {"name": "It Burns!", "tier": 4, "position": "A", "description": "+0.2 Fear per Particle"}, {"name": "Sticky Flame Duration", "tier": 4, "position": "B", "description": "+3sec Sticky Duration"}, {"name": "More Fuel", "tier": 4, "position": "C", "description": "+75 Max Fuel"}, {"name": "Heat Radiance", "tier": 5, "position": "A", "description": "80 Fire Damage & 80 Heat per sec within 4m while firing"}, {"name": "Targets Explode", "tier": 5, "position": "B", "description": "50% Chance on Direct Kill to Explode for 55 Fire Damage & 55 Heat within 3m"}]'
   ),
   (
     'Cryo Cannon',
     'Driller',
-    null,
+    array['ice'],
     '[{"name": "Larger Pressure Chamber", "tier": 1, "position": "A", "description": "x0.33 Pressure Drop Rate"}, {"name": "Faster Turbine Spinup", "tier": 1, "position": "B", "description": "-0.4sec Chargeup Time"}, {"name": "Stronger Cooling Unit", "tier": 1, "position": "C", "description": "+1 Cold per Particle"}, {"name": "Larger Reserve Tank", "tier": 2, "position": "A", "description": "+75 Tank Size"}, {"name": "Overclocked Ejection Turbine", "tier": 2, "position": "B", "description": "+5m Range"}, {"name": "Bypassed Integrity Check", "tier": 2, "position": "C", "description": "-1sec Repressurization Delay"}, {"name": "Improved Pump", "tier": 3, "position": "A", "description": "x1.75 Pressure Gain Rate"}, {"name": "Increased Flow Volume", "tier": 3, "position": "B", "description": "+1.6 Flow Rate"}, {"name": "Hard Mixture", "tier": 4, "position": "A", "description": "+3 Damage per Particle"}, {"name": "Supercooling Mixture", "tier": 4, "position": "B", "description": "+1 Cold per Particle"}, {"name": "Larger Reserve Tank", "tier": 4, "position": "C", "description": "+150 Tank Size"}, {"name": "Fragile", "tier": 5, "position": "A", "description": "Damaging Enemies below 100 HP has HP-based % chance to instantly kill"}, {"name": "Cold Radiance", "tier": 5, "position": "B", "description": "60 Cold per sec within 4m while firing"}]'
   ),
   (
