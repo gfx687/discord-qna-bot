@@ -80,7 +80,7 @@ export async function handleCommands(
     case "qna-delete":
       return await handleQnaDeleteCommand(interaction);
     case "qna-new":
-      return handleQnaNewCommand(interaction);
+      return handleQnaNewCommand();
     case "qna-help":
       return handleQnaHelp();
     case "acronym":

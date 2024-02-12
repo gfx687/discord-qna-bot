@@ -13,7 +13,7 @@ import { DRGWeaponModTier } from "../data/drg/common-types.ts";
 export async function handleWeaponAutocomplete(
   interaction: GuildCommandAutocompleteRequestData,
 ): Promise<InteractionResponseAutocomplete> {
-  const option = getInteractionOptionString(interaction, "weapon-name");
+  const option = _internal.getInteractionOptionString(interaction, "weapon-name");
   if (option?.value == null || option.value.trim() == "") {
     return {
       type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
@@ -21,7 +21,7 @@ export async function handleWeaponAutocomplete(
     };
   }
 
-  const weapons = await searchWeaponInfo(option.value);
+  const weapons = await _internal.searchWeaponInfo(option.value);
 
   return {
     type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
@@ -31,15 +31,13 @@ export async function handleWeaponAutocomplete(
   };
 }
 
-// autocomplete searches, main function only takes complete name
-
 /**
  * Handler for /weapon command for DRG discord
  */
 export async function handleDRGWeaponSearch(
   interaction: GuildInteractionRequestData,
 ): Promise<InteractionResponseReply> {
-  const weaponName = getInteractionOptionString(interaction, "weapon-name");
+  const weaponName = _internal.getInteractionOptionString(interaction, "weapon-name");
   if (weaponName?.value == null || weaponName.value.trim() == "") {
     return ChatMessageResponse(
       "Invalid input: weapon name not provided.",
@@ -47,10 +45,10 @@ export async function handleDRGWeaponSearch(
     );
   }
 
-  const tierOption = getInteractionOptionString(interaction, "tier");
+  const tierOption = _internal.getInteractionOptionString(interaction, "tier");
   const tier = parseTier(tierOption?.value);
 
-  const weapons = await searchWeaponInfo(weaponName.value);
+  const weapons = await _internal.searchWeaponInfo(weaponName.value);
   if (weapons.length == 0) {
     return ChatMessageResponse(
       `No weapon / tool matching '${weaponName.value}' found.`,
@@ -127,3 +125,8 @@ function parseTier(s: string | undefined): DRGWeaponModTier | undefined {
       return undefined;
   }
 }
+
+export const _internal = {
+  getInteractionOptionString,
+  searchWeaponInfo,
+};

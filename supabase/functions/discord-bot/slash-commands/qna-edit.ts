@@ -25,12 +25,12 @@ export const EditModalAnswerInputCustomId = "qna_edit_modal_new_answer";
 export async function handleQnaEditCommand(
   interaction: GuildInteractionRequestData,
 ): Promise<InteractionResponseReply | InteractionResponseModal> {
-  const option = getInteractionOptionString(interaction, "question");
+  const option = _internal.getInteractionOptionString(interaction, "question");
   if (option?.value == null || option.value.trim() == "") {
     return ChatMessageResponse("Question cannot be empty when using edit command.", InteractionResponseFlags.EPHEMERAL);
   }
 
-  const question = await getQuestion(interaction.guild_id, option.value);
+  const question = await _internal.getQuestion(interaction.guild_id, option.value);
   if (question == null) {
     return ChatMessageResponse(
       "No question found. Make sure to provide full name of the question, edit command does not allow for ambiguity in search term.",
@@ -48,7 +48,7 @@ export async function handleQnaEditCommand(
     startedAt: new Date(),
   });
 
-  await createEditProcess(editProcess);
+  await _internal.createEditProcess(editProcess);
 
   return {
     type: InteractionResponseType.MODAL,
@@ -79,7 +79,7 @@ export async function handleQnaEditCommand(
 export async function handleQnaEditModalSubmit(
   interaction: GuildModalSubmitRequestData,
 ): Promise<InteractionResponseReply> {
-  const editProcess = await getEditProcess(interaction.data.custom_id);
+  const editProcess = await _internal.getEditProcess(interaction.data.custom_id);
 
   if (editProcess == null) {
     return ChatMessageResponse(
@@ -96,7 +96,15 @@ export async function handleQnaEditModalSubmit(
     return ChatMessageResponse("Invalid answer was provided.", InteractionResponseFlags.EPHEMERAL);
   }
 
-  await updateQuestionAnswer(editProcess.guildId, editProcess.question, newAnswer.value.trim());
+  await _internal.updateQuestionAnswer(editProcess.guildId, editProcess.question, newAnswer.value.trim());
 
   return ChatMessageResponse(`Saved new answer to question "${editProcess.question}".\n\n${newAnswer.value.trim()}`);
 }
+
+export const _internal = {
+  getInteractionOptionString,
+  getQuestion,
+  createEditProcess,
+  getEditProcess,
+  updateQuestionAnswer,
+};

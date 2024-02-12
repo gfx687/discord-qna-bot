@@ -9,7 +9,7 @@ import { Acronym } from "../../../../../../supabase/functions/discord-bot/data/a
 import { Question } from "../../../../../../supabase/functions/discord-bot/data/question-types.ts";
 import { AcronymType } from "../../../../../../supabase/functions/discord-bot/data/acronym-types.ts";
 
-Deno.test("no search term provided - should return Invalid input", async () => {
+Deno.test("handleAcronymSearch: no search term provided - should return Invalid input", async () => {
   const getOptionStub = stub(_internal, "getInteractionOptionString", returnsNext([undefined]));
 
   try {
@@ -22,7 +22,7 @@ Deno.test("no search term provided - should return Invalid input", async () => {
   }
 });
 
-Deno.test("acronyms found - should return expected message", async () => {
+Deno.test("handleAcronymSearch: acronyms found - should return expected message", async () => {
   const acronym = "umc".toUpperCase();
   const expectedMessage = `Found definitions for '${acronym}':
 
@@ -74,7 +74,7 @@ Weapon Mods:
   }
 });
 
-Deno.test("acronyms not found but questions found - should return first question's answer", async () => {
+Deno.test("handleAcronymSearch: acronyms not found but questions found - should return first question's answer", async () => {
   const questions: Question[] = [{
     question: "question-1",
     answer: "answer-1",
@@ -105,7 +105,7 @@ Deno.test("acronyms not found but questions found - should return first question
   }
 });
 
-Deno.test("neither acronyms nor questions found - should return No match", async () => {
+Deno.test("handleAcronymSearch: neither acronyms nor questions found - should return No match", async () => {
   const acronym = "acronym".toUpperCase();
   const getOptionStub = stub(
     _internal,

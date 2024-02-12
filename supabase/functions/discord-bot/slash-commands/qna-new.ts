@@ -1,7 +1,6 @@
 import {
   ComponentActionRow,
   ComponentType,
-  GuildInteractionRequestData,
   GuildModalSubmitRequestData,
   InteractionResponseFlags,
   InteractionResponseType,
@@ -13,15 +12,15 @@ import { createQuestion } from "../data/question-repository.ts";
 import { questionZod } from "../data/question-types.ts";
 
 export const NewQuestionModalCustomId = "qna_new_modal";
-const NewQuestionModalQuestionCustomId = "qna_new_modal_question";
-const NewQuestionModalAnswerCustomId = "qna_new_modal_answer";
+export const NewQuestionModalQuestionCustomId = "qna_new_modal_question";
+export const NewQuestionModalAnswerCustomId = "qna_new_modal_answer";
 
 const UniqueViolationPostgresError = "23505";
 
 /**
  * Handle initial /qna-new command call and return modal window to gather inputs
  */
-export function handleQnaNewCommand(_interaction: GuildInteractionRequestData): InteractionResponseModal {
+export function handleQnaNewCommand(): InteractionResponseModal {
   return {
     type: InteractionResponseType.MODAL,
     data: {
@@ -95,7 +94,7 @@ export async function handleQnaNewModalSubmit(
   }
 
   try {
-    await createQuestion(newQuestion.data);
+    await _internal.createQuestion(newQuestion.data);
   } catch (err) {
     if (err.code == UniqueViolationPostgresError) {
       return ChatMessageResponse(`Question "${question}" already exists.`, InteractionResponseFlags.EPHEMERAL);
@@ -107,3 +106,7 @@ export async function handleQnaNewModalSubmit(
     `New question "${newQuestion.data.question}" has been added.\n\n${newQuestion.data.answer}`,
   );
 }
+
+export const _internal = {
+  createQuestion,
+};
