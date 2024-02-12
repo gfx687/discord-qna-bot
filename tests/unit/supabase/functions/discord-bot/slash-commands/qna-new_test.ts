@@ -13,6 +13,8 @@ import {
   InteractionResponseFlags,
   InteractionResponseType,
 } from "npm:slash-create";
+import { resolvesNext, stub } from "https://deno.land/std@0.214.0/testing/mock.ts";
+import { _internal } from "../../../../../../supabase/functions/discord-bot/slash-commands/qna-new.ts";
 
 Deno.test("handleQnaNewCommand: when called - should return modal", () => {
   const res = handleQnaNewCommand();
@@ -83,13 +85,17 @@ Deno.test("handleQnaNewModalSubmit: new question is invalid - should return prob
 
     const res = await handleQnaNewModalSubmit(interaction);
 
-    assertEquals(res.data.flags, InteractionResponseFlags.EPHEMERAL);
     assertEquals(res.data.content, `Validation error. Problems: Required; Question is required; Answer is required.`);
+    assertEquals(res.data.flags, InteractionResponseFlags.EPHEMERAL);
   });
 });
 
-Deno.test("handleQnaNewModalSubmit: new question invalid - should return problems", async () => {
+// TODO: did not find how to make stub throw an error, skipping this test for now
+// Deno.test("handleQnaNewModalSubmit: question already exists - should return error", async () => {});
+
+Deno.test("handleQnaNewModalSubmit: question created - should return expected message", async () => {
   const interaction = {
+    guild_id: "test-guildId",
     data: {
       components: [
         {
@@ -116,11 +122,17 @@ Deno.test("handleQnaNewModalSubmit: new question invalid - should return problem
     },
   } as GuildModalSubmitRequestData;
 
-  // createQuestion should throw
-});
+  const createQuestionStub = stub(_internal, "createQuestion", resolvesNext([undefined]));
 
-// TODO:
-// handleQnaNewModalSubmit
-// 1. new question is invalid
-// 2. question already exists
-// 3. success
+  try {
+    const res = await handleQnaNewModalSubmit(interaction);
+
+    assertEquals(
+      res.data.content,
+      `New question "new-question" has been added.\n\nnew-answer`,
+    );
+    assertEquals(res.data.flags, undefined);
+  } finally {
+    createQuestionStub.restore();
+  }
+});

@@ -3,4 +3,3 @@ node_modules
 deno.lock
 .vim
 .idea
-.vscode

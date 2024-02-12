@@ -2,7 +2,8 @@
   "deno.enablePaths": [
     "supabase/functions",
     "bot-control-commands",
-    ".tempfiles"
+    ".tempfiles",
+    "tests"
   ],
   "deno.lint": true,
   "deno.unstable": true,
