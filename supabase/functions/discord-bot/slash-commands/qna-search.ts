@@ -12,7 +12,7 @@ import {
 export async function handleQnaAutocomplete(
   interaction: GuildCommandAutocompleteRequestData,
 ): Promise<InteractionResponseAutocomplete> {
-  const option = getInteractionOptionString(interaction, "question");
+  const option = _internal.getInteractionOptionString(interaction, "question");
   if (option?.value == null || option.value.trim() == "") {
     return {
       type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
@@ -20,7 +20,7 @@ export async function handleQnaAutocomplete(
     };
   }
 
-  const questions = await searchQuestions(interaction.guild_id, option.value);
+  const questions = await _internal.searchQuestions(interaction.guild_id, option.value);
 
   return {
     type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
@@ -33,12 +33,12 @@ export async function handleQnaAutocomplete(
 export async function handleQnaCommand(
   interaction: GuildInteractionRequestData,
 ): Promise<InteractionResponseReply> {
-  const option = getInteractionOptionString(interaction, "question");
+  const option = _internal.getInteractionOptionString(interaction, "question");
   if (option?.value == null || option.value.trim() == "") {
     return ChatMessageResponse("Invalid question or something went wrong.", InteractionResponseFlags.EPHEMERAL);
   }
 
-  const questions = await searchQuestions(interaction.guild_id, option.value);
+  const questions = await _internal.searchQuestions(interaction.guild_id, option.value);
 
   if (questions.length == 0) {
     return ChatMessageResponse(
@@ -49,3 +49,8 @@ export async function handleQnaCommand(
 
   return ChatMessageResponse(questions[0].answer);
 }
+
+export const _internal = {
+  getInteractionOptionString,
+  searchQuestions,
+};
